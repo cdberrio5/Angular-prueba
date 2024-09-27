@@ -5,10 +5,10 @@ FROM mysql:8
 COPY init.sql /docker-entrypoint-initdb.d/
 
 # Establece las variables de entorno para el contenedor
-ENV MYSQL_ROOT_PASSWORD=root_password
-ENV MYSQL_DATABASE=test
-ENV MYSQL_USER=user
-ENV MYSQL_PASSWORD=password
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=Test
+ENV MYSQL_USER=admin
+ENV MYSQL_PASSWORD=admin
 
 # Exponer el puerto de MySQL
 EXPOSE 3306

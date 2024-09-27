@@ -1,6 +1,6 @@
 services:
-  backend:
-    build: ./API
+  api:
+    build: ./api
     container_name: node_backend
     ports:
       - "3000:3000"
@@ -8,16 +8,16 @@ services:
       - db
     environment:
       DB_HOST: db
-      DB_USER: user
-      DB_PASSWORD: password
-      DB_NAME: test
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_NAME: Test
     networks:
       - app-network
     volumes:
-      - ./API:/usr/src/app
+      - ./backend:/usr/src/app
     command: npm start
 
-  frontend:
+  front:
     build: ./Front
     container_name: angular_frontend
     ports:
@@ -27,19 +27,19 @@ services:
     networks:
       - app-network
     volumes:
-      - ./Front:/usr/src/app
+      - ./frontend:/usr/src/app
 
   db:
-    build: ./BD
+    build: ./db
     container_name: mysql_db
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Test
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
     volumes:
-      - ./BD/data:/var/lib/mysql
-      - ./BD/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     networks:
