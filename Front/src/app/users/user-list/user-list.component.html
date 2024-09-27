@@ -1,0 +1,55 @@
+<mat-card>
+  <mat-card-title>Manage users</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" />
+          <mat-error *ngIf="userForm.get('fullName')?.hasError('required')">
+            Full Name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" />
+          <mat-error *ngIf="userForm.get('age')?.hasError('required')">
+            Age is required
+          </mat-error>
+          <mat-error *ngIf="userForm.get('age')?.hasError('min')">
+            Age must be at least 1
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div formArrayName="skills">
+        <h4>Skills</h4>
+        <div *ngFor="let skill of skills.controls; let i = index" [formGroupName]="i" class="skill-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Skill</mat-label>
+            <input matInput [formControlName]="i" />
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="removeSkill(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <button mat-button color="primary" (click)="addSkill()" type="button">Add Skill</button>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit">Add user</button>
+    </form>
+
+    <mat-list>
+      <mat-list-item *ngFor="let user of users">
+        <h4 matLine>{{ user.fullName }} ({{ user.age }} years)</h4>
+        <p matLine>Skills: {{ user.skills.join(', ') }}</p>
+        <button mat-icon-button color="warn" (click)="removeUser(user.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,36 @@
+<div class="user-form-container">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" type="text" placeholder="Enter your name" />
+      <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+        Name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" placeholder="Enter your email" />
+      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+        Valid email is required
+      </div>
+    </div>
+
+    <div formArrayName="skills" class="skills-section">
+      <h3>Skills</h3>
+      <button type="button" (click)="addSkill()">Add Skill</button>
+
+      <div *ngFor="let skill of skills.controls; let i = index" [formGroupName]="i" class="skill">
+        <label for="skillName">Skill Name</label>
+        <input id="skillName" formControlName="skillName" type="text" placeholder="Enter skill name" />
+
+        <label for="experience">Experience</label>
+        <input id="experience" formControlName="experience" type="text" placeholder="Enter years of experience" />
+
+        <button type="button" (click)="removeSkill(i)">Remove</button>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="userForm.invalid">Submit</button>
+  </form>
+</div>

@@ -1,0 +1,43 @@
+.user-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.skills-section {
+  margin-top: 20px;
+}
+
+.skill {
+  margin-bottom: 10px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .user-form-container {
+    padding: 8px;
+  }
+
+  .form-group input {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+}
