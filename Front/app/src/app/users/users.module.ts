@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserFormComponent } from './user-form/user-form.component';
+import { UserDetailComponent } from './user-detail/user-detail.component';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from './../store/users/user.reducer';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,10 +15,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 
+
 @NgModule({
   declarations: [
     UserListComponent,
-    UserFormComponent
+    UserFormComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -32,11 +35,12 @@ import { MatListModule } from '@angular/material/list';
     MatListModule,
     CommonModule,
     ReactiveFormsModule,
-    StoreModule.forFeature('users', userReducer)
+    StoreModule.forFeature('users', userReducer),
   ],
   exports: [
     UserListComponent,
-    UserFormComponent
+    UserFormComponent,
+    UserDetailComponent
   ]
 })
 export class UsersModule { }

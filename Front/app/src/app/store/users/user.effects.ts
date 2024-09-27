@@ -1,23 +1,31 @@
+// user.effects.ts
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { UserService } from './../../core/services/user.service';
 import {
-  addUser, addUserSuccess, addUserFailure,
-  loadUsers, loadUsersSuccess, loadUsersFailure,
-  updateUser, updateUserSuccess, updateUserFailure,
-  deleteUser, deleteUserSuccess, deleteUserFailure
+  addUser,
+  addUserSuccess,
+  addUserFailure,
+  loadUsers,
+  loadUsersSuccess,
+  loadUsersFailure,
+  updateUser,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUser,
+  deleteUserSuccess,
+  deleteUserFailure
 } from './user.actions';
 import { User } from './../../models/user.model';
 
 @Injectable()
 export class UserEffects {
-
   constructor(
     private actions$: Actions,
     private userService: UserService
-  ) { }
+  ) {}
 
   loadUsers$ = createEffect(() => this.actions$.pipe(
     ofType(loadUsers),
@@ -50,7 +58,7 @@ export class UserEffects {
     ofType(deleteUser),
     mergeMap(action => this.userService.deleteUser(action.id)
       .pipe(
-        map(id => deleteUserSuccess({ id })),
+        map(() => deleteUserSuccess({ id: action.id })),
         catchError(error => of(deleteUserFailure({ error })))
       ))
   ));

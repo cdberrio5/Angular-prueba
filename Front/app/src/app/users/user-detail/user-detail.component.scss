@@ -1,0 +1,21 @@
+mat-card {
+    margin: 16px;
+    padding: 16px;
+  
+    @media (max-width: 600px) {
+      margin: 8px;
+      padding: 8px;
+    }
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  button {
+    margin-top: 8px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+  

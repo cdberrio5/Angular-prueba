@@ -1,66 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { TaskService } from './../../core/services/task.service';
-import { User } from './../../models/user.model';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { addUser } from './../../store/users/user.actions';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserFormComponent implements OnInit {
-  users: User[] = [];
+export class UserFormComponent {
   userForm: FormGroup;
 
-  constructor(private taskService: TaskService, private fb: FormBuilder) {
-    this.userForm = this.fb.group({
+  constructor(
+    public dialogRef: MatDialogRef<UserFormComponent>,
+    private formBuilder: FormBuilder,
+    private store: Store,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.userForm = this.formBuilder.group({
       fullName: ['', Validators.required],
       age: ['', [Validators.required, Validators.min(1)]],
-      skills: this.fb.array([], Validators.required)
+      skills: this.formBuilder.array([]) // Array para habilidades
     });
   }
 
-  ngOnInit(): void {
-    this.taskService.getTasks().subscribe(tasks => {
-      const allUsers = tasks.flatMap(task => task.assignedUsers);
-      this.users = Array.from(new Map(allUsers.map(user => [user.id, user])).values());
-    });
-  }
-
-  get skills(): FormArray {
-    return this.userForm.get('skills') as FormArray;
-  }
-
-  addUser() {
-    if (this.userForm.valid) {
-      const newUser: User = {
-        id: this.users.length + 1,
-        fullName: this.userForm.value.fullName,
-        age: this.userForm.value.age,
-        skills: this.userForm.value.skills
-      };
-
-      this.users.push(newUser);
-      this.userForm.reset();
-    }
-  }
-
-  removeUser(id: number) {
-    this.users = this.users.filter(user => user.id !== id);
-  }
-
+  // Método para agregar una habilidad
   addSkill() {
-    this.skills.push(this.fb.group({
-      skillName: ['', Validators.required],
-      experience: ['', Validators.required]
-    }));
+    this.skills.push(this.formBuilder.control(''));
   }
 
+  // Método para eliminar una habilidad
   removeSkill(index: number) {
     this.skills.removeAt(index);
   }
 
+  get skills() {
+    return this.userForm.get('skills') as FormArray;
+  }
+
+  // Método para enviar el formulario
   onSubmit() {
-    this.addUser();
+    if (this.userForm.valid) {
+      this.store.dispatch(addUser({ user: this.userForm.value }));
+      this.dialogRef.close();
+    }
+  }
+
+  // Cerrar el diálogo sin guardar
+  onCancel(): void {
+    this.dialogRef.close();
   }
 }

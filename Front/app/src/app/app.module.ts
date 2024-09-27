@@ -10,6 +10,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { UserEffects } from './store/users/user.effects';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -17,17 +20,19 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
     TasksModule,
     UsersModule,
     HttpClientModule,
+    MatDialogModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
-    StoreDevtoolsModule.instrument({ maxAge: 25 })
+    EffectsModule.forRoot([UserEffects]),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

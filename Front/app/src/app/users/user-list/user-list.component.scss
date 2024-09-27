@@ -1,12 +1,62 @@
-.skill-group {
+.user-search {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.skill-group mat-form-field {
-  flex: 1;
+.user-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
 }
 
-.skill-group button {
-  margin-left: 10px;
+.user-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.user-card h3 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.user-card p {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #555;
+}
+
+.user-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-card ul li {
+  margin-bottom: 5px;
+  color: #777;
+}
+
+.add-user-btn {
+  align-self: flex-end;
+  background-color: #ff4081 !important;
+  color: white !important;
+  align-self: auto; /* Alinea el botón a la derecha */
+}
+
+.edit-button {
+  background-color: #ff4081; /* Corregir la coma extra */
+  border-radius: 100%;
+  color: white;
+}
+
+/* Efecto hover para botones */
+.add-user-btn:hover, .edit-button:hover {
+  background-color: #e91e63 !important; /* Cambiar a un color más oscuro en hover */
 }
