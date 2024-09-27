@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from './../../core/services/task.service';
-import { User } from '../../models/user.model';
+import { User } from './../../models/user.model';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 @Component({

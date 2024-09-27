@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { TaskService } from './../../core/services/task.service';
-import { User } from '../../models/user.model';
+import { User } from './../../models/user.model';
 
 @Component({
   selector: 'app-user-list',

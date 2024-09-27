@@ -1,4 +1,4 @@
-import { AppDataSource } from '../config/database';
+import { AppDataSource } from './../config/database';
 import { User } from './../models/user.model';
 
 export class UserService {

@@ -1,14 +1,13 @@
 {
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "tu_usuario",
-    "password": "tu_contraseña",
-    "database": "tu_base_de_datos",
-    "synchronize": true,
-    "logging": true,
-    "entities": [
-      "src/models/**/*.ts"
-    ]
-  }
-  
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "tu_usuario",
+  "password": "tu_contraseña",
+  "database": "tu_base_de_datos",
+  "synchronize": true,
+  "logging": true,
+  "entities": [
+    "src/models/**/*.ts"
+  ]
+}

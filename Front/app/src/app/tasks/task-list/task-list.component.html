@@ -21,7 +21,8 @@
 
     <div class="kanban-column">
         <h3>Completed Tasks</h3>
-        <div cdkDropList id="completedList" [cdkDropListData]="completedTasks" class="task-list" (cdkDropListDropped)="drop($event)">
+        <div cdkDropList id="completedList" [cdkDropListData]="completedTasks" class="task-list"
+            (cdkDropListDropped)="drop($event)">
             <div *ngFor="let task of completedTasks" cdkDrag>
                 <mat-card>
                     <mat-card-title>{{ task.title }}</mat-card-title>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { TaskService } from './../../core/services/task.service';
-import { Task } from '../../models/task.model';
-import { User } from '../../models/user.model';
+import { Task } from './../../models/task.model';
+import { User } from './../../models/user.model';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -35,7 +35,6 @@ export class TaskFormComponent implements OnInit {
       if (params['id']) {
         this.isEditMode = true;
         this.taskId = +params['id'];
-        // Aquí deberías cargar la tarea existente y poblar el formulario
         this.taskService.getTasks().subscribe(tasks => {
           const task = tasks.find(t => t.id === this.taskId);
           if (task) {

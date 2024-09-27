@@ -1,29 +1,28 @@
 .kanban-board {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.kanban-column {
+  flex: 1;
+  min-width: 300px;
+}
+
+.task-list {
+  min-height: 200px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+mat-card {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .kanban-board {
+    flex-direction: column;
   }
-  
-  .kanban-column {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  .task-list {
-    min-height: 200px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 4px;
-    background-color: #fafafa;
-  }
-  
-  mat-card {
-    margin-bottom: 10px;
-  }
-  
-  @media (max-width: 768px) {
-    .kanban-board {
-      flex-direction: column;
-    }
-  }
-  
+}

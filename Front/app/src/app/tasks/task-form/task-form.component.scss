@@ -1,17 +1,16 @@
 .user-group {
-    margin-bottom: 20px;
-  }
-  
-  .skill-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .skill-group mat-form-field {
-    flex: 1;
-  }
-  
-  .skill-group button {
-    margin-left: 10px;
-  }
-  
+  margin-bottom: 20px;
+}
+
+.skill-group {
+  display: flex;
+  align-items: center;
+}
+
+.skill-group mat-form-field {
+  flex: 1;
+}
+
+.skill-group button {
+  margin-left: 10px;
+}

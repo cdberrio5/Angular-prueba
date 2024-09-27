@@ -9,7 +9,7 @@ import {
 
 export const userReducer = createReducer(
   initialState,
-  
+
   on(loadUsersSuccess, (state, { users }) => ({
     ...state,
     users,

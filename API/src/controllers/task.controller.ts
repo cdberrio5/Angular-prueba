@@ -3,7 +3,7 @@ import { TaskService } from './../services/task.service';
 import { Task } from './../models/task.model';
 
 export class TaskController {
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService) { }
 
   async createTask(req: Request, res: Response): Promise<Response> {
     const taskData: Partial<Task> = req.body;

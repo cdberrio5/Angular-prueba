@@ -1,5 +1,5 @@
-import { AppDataSource } from '../config/database';
-import { Task } from './../models/task.model'; // Ajusta la ruta según tu estructura
+import { AppDataSource } from './../config/database';
+import { Task } from './../models/task.model';
 
 export class TaskService {
   private taskRepository = AppDataSource.getRepository(Task);
