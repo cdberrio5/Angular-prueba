@@ -1,23 +1,28 @@
-import { createConnection } from 'typeorm';
+import "reflect-metadata"; // Necesario para TypeORM
+import { DataSource } from "typeorm";
+import { User } from "./../models/user.model";
+import { Task } from "./../models/task.model";
 import dotenv from 'dotenv';
 
 dotenv.config();
 
+export const AppDataSource = new DataSource({
+  type: "mysql",
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT) || 3306,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  synchronize: true,
+  logging: true,
+  entities: [User, Task],
+});
+
 export const connectDatabase = async () => {
   try {
-    await createConnection({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [__dirname + '/../models/*.ts'], // Asegúrate de usar la ruta correcta
-      synchronize: true,
-    });
-    console.log('Database connection established');
+    await AppDataSource.initialize();
+    console.log("Conexión a la base de datos establecida correctamente.");
   } catch (error) {
-    console.error('Database connection failed', error);
-    process.exit(1); // Salir del proceso si falla la conexión
+    console.error("Error al conectar a la base de datos:", error);
   }
 };

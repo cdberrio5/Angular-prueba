@@ -1,8 +1,8 @@
-import { getRepository } from 'typeorm';
+import { AppDataSource } from '../config/database';
 import { User } from './../models/user.model';
 
 export class UserService {
-    private userRepository = getRepository(User);
+    private userRepository = AppDataSource.getRepository(User);
 
     public async createUser(user: User): Promise<User> {
         return await this.userRepository.save(user);
@@ -12,7 +12,7 @@ export class UserService {
         return await this.userRepository.find();
     }
 
-    public async getUserById(id: number): Promise<User | null> { // Cambiado a User | null
+    public async getUserById(id: number): Promise<User | null> {
         const user = await this.userRepository.findOne({
             where: { id },
         });

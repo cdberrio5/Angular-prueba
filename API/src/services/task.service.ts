@@ -1,9 +1,8 @@
-import { Repository } from 'typeorm';
+import { AppDataSource } from '../config/database';
 import { Task } from './../models/task.model'; // Ajusta la ruta según tu estructura
-import { User } from './../models/user.model'; // Ajusta la ruta según tu estructura
 
 export class TaskService {
-  constructor(private taskRepository: Repository<Task>) {}
+  private taskRepository = AppDataSource.getRepository(Task);
 
   async createTask(taskData: Partial<Task>): Promise<Task> {
     const task = this.taskRepository.create(taskData);
