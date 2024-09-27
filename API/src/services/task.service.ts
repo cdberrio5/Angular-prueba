@@ -11,13 +11,13 @@ export class TaskService {
   }
 
   async getAllTasks(): Promise<Task[]> {
-    return await this.taskRepository.find({ relations: ['associatedPersons'] });
+    return await this.taskRepository.find({ relations: ['associatedUsers'] });
   }
 
   async getTaskById(id: number): Promise<Task | null> {
     return await this.taskRepository.findOne({
       where: { id },
-      relations: ['associatedPersons'],
+      relations: ['associatedUsers'],
     });
   }
 

@@ -17,5 +17,5 @@ export class Task {
 
   @ManyToMany(() => User)
   @JoinTable()
-  associatedPersons!: User[];
+  associatedUsers!: User[];
 }

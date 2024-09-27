@@ -1,0 +1,40 @@
+<div class="kanban-board">
+    <div class="kanban-column">
+        <h3>Pending Tasks</h3>
+        <div cdkDropList id="pendingList" [cdkDropListData]="pendingTasks" class="task-list"
+            (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let task of pendingTasks" cdkDrag>
+                <mat-card>
+                    <mat-card-title>{{ task.title }}</mat-card-title>
+                    <mat-card-content>
+                        <p>{{ task.description }}</p>
+                        <p>Due: {{ task.dueDate | date }}</p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button (click)="toggleCompletion(task)">Mark as Completed</button>
+                        <a mat-button [routerLink]="['/tasks', 'edit', task.id]">Edit</a>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <div class="kanban-column">
+        <h3>Completed Tasks</h3>
+        <div cdkDropList id="completedList" [cdkDropListData]="completedTasks" class="task-list" (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let task of completedTasks" cdkDrag>
+                <mat-card>
+                    <mat-card-title>{{ task.title }}</mat-card-title>
+                    <mat-card-content>
+                        <p>{{ task.description }}</p>
+                        <p>Due: {{ task.dueDate | date }}</p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button (click)="toggleCompletion(task)">Mark as Pending</button>
+                        <a mat-button [routerLink]="['/tasks', 'edit', task.id]">Edit</a>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
