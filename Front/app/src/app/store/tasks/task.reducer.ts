@@ -1,67 +1,60 @@
-import { createReducer, on } from '@ngrx/store';
-import { TaskState, initialTaskState } from './task.state';
+import { createReducer, on } from '@ngrx/store'; // Import createReducer and on functions from NgRx store.
+import { initialTaskState } from './task.state'; // Import the initial state for tasks.
 import { 
   addTaskFailure, 
-  addTaskSuccess, 
-  deleteTaskFailure, 
-  deleteTaskSuccess, 
+  addTaskSuccess,
   loadTasksFailure, 
   loadTasksSuccess, 
   updateTask, 
   updateTaskFailure, 
   updateTaskSuccess 
-} from './task.actions';
+} from './task.actions'; // Import task-related actions.
 
 export const taskReducer = createReducer(
-  initialTaskState,
+  initialTaskState, // Initialize the reducer with the initial state.
+  
+  // Handle the successful loading of tasks
   on(loadTasksSuccess, (state, { tasks }) => ({
-    ...state,
-    tasks
+    ...state, // Spread the current state
+    tasks // Update the tasks array with the new tasks
   })),
 
+  // Handle loading tasks failure
   on(loadTasksFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
+    ...state, // Spread the current state
+    loading: false, // Set loading to false
+    error // Update the error with the received error
   })),
 
+  // Handle successful addition of a new task
   on(addTaskSuccess, (state, { task }) => ({
-    ...state,
-    tasks: [...state.tasks, task]
+    ...state, // Spread the current state
+    tasks: [...state.tasks, task] // Add the new task to the existing tasks array
   })),
 
+  // Handle addition of a task failure
   on(addTaskFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
+    ...state, // Spread the current state
+    loading: false, // Set loading to false
+    error // Update the error with the received error
   })),
 
-  // Cambiar esta parte
+  // Handle task update request
   on(updateTask, (state, { task }) => ({
-    ...state,
-    tasks: state.tasks.map(t => (t.id === task.id ? task : t)) // Reemplaza la tarea existente
+    ...state, // Spread the current state
+    tasks: state.tasks.map(t => (t.id === task.id ? task : t)) // Replace the existing task with the updated task
   })),
 
-  // También cambiar updateTaskSuccess
+  // Handle successful task update
   on(updateTaskSuccess, (state, { task }) => ({
-    ...state,
-    tasks: state.tasks.map(t => (t.id === task.id ? task : t)) // Reemplaza la tarea existente
+    ...state, // Spread the current state
+    tasks: state.tasks.map(t => (t.id === task.id ? task : t)) // Replace the existing task with the updated task
   })),
 
+  // Handle update task failure
   on(updateTaskFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
-  })),
-
-  on(deleteTaskSuccess, (state, { taskId }) => ({
-    ...state,
-    tasks: state.tasks.filter(p => p.id !== taskId),
-  })),
-
-  on(deleteTaskFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
+    ...state, // Spread the current state
+    loading: false, // Set loading to false
+    error // Update the error with the received error
   })),
 );

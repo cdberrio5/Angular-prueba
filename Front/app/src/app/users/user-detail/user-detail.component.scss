@@ -1,44 +1,54 @@
+// Style for mat-card components
 mat-card {
-  margin: 16px;
-  padding: 16px;
+  margin: 16px; // Set a margin around the card
+  padding: 16px; // Set padding inside the card
 
+  // Media query for responsive design on smaller screens
   @media (max-width: 600px) {
-    margin: 8px;
-    padding: 8px;
+    margin: 8px; // Reduce margin on small screens
+    padding: 8px; // Reduce padding on small screens
   }
 }
 
+// Style for mat-form-field components
 mat-form-field {
-  width: 100%;
+  width: 100%; // Make form fields take the full width of their container
 }
 
+// General button styles
 button {
-  margin-top: 8px;
+  margin-top: 8px; // Add a top margin to buttons
 
+  // Styles for button hover state
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1); // Light background on hover
   }
 }
 
+// Additional styles for mat-card
 mat-card {
-  padding: 16px;
+  padding: 16px; // Set padding for mat-card
 }
 
+// Style for mat-form-field to add margin below each field
 mat-form-field {
-  width: 100%;
-  margin-bottom: 16px;
+  width: 100%; // Ensure full width for form fields
+  margin-bottom: 16px; // Add bottom margin for spacing
 }
 
+// Style for actions in mat-card
 mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+  display: flex; // Use flexbox for layout
+  justify-content: space-between; // Distribute space evenly between items
+  gap: 8px; // Add space between items
 }
 
+// General button margin for actions
 button {
-  margin-top: 16px;
+  margin-top: 16px; // Set top margin for action buttons
 }
 
+// Style for mat-icon-button components
 mat-icon-button {
-  vertical-align: middle;
+  vertical-align: middle; // Align icons vertically in the middle
 }

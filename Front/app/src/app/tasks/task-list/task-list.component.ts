@@ -16,61 +16,63 @@ import { TaskDetailComponent } from '../task-detail/task-detail.component';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
+  // Observables for different task statuses
   newTasks$: Observable<Task[]> | undefined;
   pendingTasks$: Observable<Task[]> | undefined;
   completedTasks$: Observable<Task[]> | undefined;
   deletedTasks$: Observable<Task[]> | undefined;
-  selectedStatus: number = 0;
+
+  selectedStatus: number = 0; // Variable to hold the currently selected status filter
   allTasks!: Task[];
 
   constructor(
-    private dialog: MatDialog,
-    private store: Store<TaskState>
+    private dialog: MatDialog, // Dialog service for opening modals
+    private store: Store<TaskState> // NgRx store to manage task state
   ) { }
 
   ngOnInit(): void {
-    this.loadTasks();
-    this.filterTasks();
+    this.loadTasks(); // Load tasks when the component initializes
+    this.filterTasks(); // Filter tasks based on the selected status
   }
 
   loadTasks() {
-    this.store.dispatch(loadTasks());
+    this.store.dispatch(loadTasks()); // Dispatch action to load tasks from the store
   }
 
   filterTasks() {
-    // Reiniciar tareas
+    // Reset tasks based on the selected status
     this.newTasks$ = this.store.select(selectNewTasks);
     this.pendingTasks$ = this.store.select(selectPendingTasks);
     this.completedTasks$ = this.store.select(selectCompletedTasks);
     this.deletedTasks$ = this.store.select(selectDeletedTasks);
 
-    // Aplicar filtro según el estado seleccionado
+    // Apply filter according to the selected status
     switch (this.selectedStatus) {
       case 0:
-        break; // No hacemos nada porque ya tenemos todas las tareas
-      case 1: // Tareas Nuevas
-        console.log("muestra algo{")
+        break; // Do nothing, as all tasks are already selected
+      case 1: // New Tasks
+        console.log("Displaying new tasks");
         this.newTasks$ = this.store.select(selectNewTasks);
-        this.pendingTasks$ = of([]); // Vaciar tareas pendientes
-        this.completedTasks$ = of([]); // Vaciar tareas completadas
-        this.deletedTasks$ = of([]); // Vaciar tareas completadas
+        this.pendingTasks$ = of([]); // Clear pending tasks
+        this.completedTasks$ = of([]); // Clear completed tasks
+        this.deletedTasks$ = of([]); // Clear deleted tasks
         break;
-      case 2: // Tareas Pendientes
-        this.newTasks$ = of([]); // Vaciar tareas nuevas
+      case 2: // Pending Tasks
+        this.newTasks$ = of([]); // Clear new tasks
         this.pendingTasks$ = this.store.select(selectPendingTasks);
-        this.completedTasks$ = of([]); // Vaciar tareas completadas
-        this.deletedTasks$ = of([]); // Vaciar tareas completadas
+        this.completedTasks$ = of([]); // Clear completed tasks
+        this.deletedTasks$ = of([]); // Clear deleted tasks
         break;
-      case 3: // Tareas Completadas
-        this.newTasks$ = of([]); // Vaciar tareas nuevas
-        this.pendingTasks$ = of([]); // Vaciar tareas pendientes
+      case 3: // Completed Tasks
+        this.newTasks$ = of([]); // Clear new tasks
+        this.pendingTasks$ = of([]); // Clear pending tasks
         this.completedTasks$ = this.store.select(selectCompletedTasks);
-        this.deletedTasks$ = of([]); // Vaciar tareas completadas
+        this.deletedTasks$ = of([]); // Clear deleted tasks
         break;
-      case 4: // Tareas Completadas
-        this.newTasks$ = of([]); // Vaciar tareas nuevas
-        this.pendingTasks$ = of([]); // Vaciar tareas pendientes
-        this.completedTasks$ = of([]);
+      case 4: // Deleted Tasks
+        this.newTasks$ = of([]); // Clear new tasks
+        this.pendingTasks$ = of([]); // Clear pending tasks
+        this.completedTasks$ = of([]); // Clear completed tasks
         this.deletedTasks$ = this.store.select(selectDeletedTasks);
         break;
       default:
@@ -80,10 +82,10 @@ export class TaskListComponent implements OnInit {
 
   drop(event: CdkDragDrop<Task[]>) {
     if (event.previousContainer === event.container) {
-      // Mover tarea dentro de la misma lista
+      // Move task within the same list
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      // Transferir tarea entre listas
+      // Transfer task between lists
       const task = event.previousContainer.data[event.previousIndex];
       transferArrayItem(
         event.previousContainer.data,
@@ -92,40 +94,41 @@ export class TaskListComponent implements OnInit {
         event.currentIndex
       );
 
+      // Handle the status change of the moved task
       this.onTaskMoved(event.container.id, task);
     }
   }
 
-
   onTaskMoved(newContainer: string, task: Task) {
     let newStatus: number;
 
+    // Determine new status based on the drop container
     switch (newContainer) {
-      case 'cdk-drop-list-0': // Nuevas Tareas
+      case 'cdk-drop-list-0': // New Tasks
         newStatus = 1;
         break;
-      case 'cdk-drop-list-1': // Tareas Pendientes
+      case 'cdk-drop-list-1': // Pending Tasks
         newStatus = 2;
         break;
-      case 'cdk-drop-list-2': // Tareas Completadas
+      case 'cdk-drop-list-2': // Completed Tasks
         newStatus = 3;
         break;
-      case 'cdk-drop-list-3': // Tareas Eliminadas
+      case 'cdk-drop-list-3': // Deleted Tasks
         newStatus = 4;
         break;
       default:
         return;
     }
 
-    // Actualiza el estado de la tarea
+    // Update the task status
     this.updateTaskStatus(task, newStatus);
   }
 
   updateTaskStatus(task: Task, newStatus: number) {
-    // Crea un nuevo objeto de tarea con el estado actualizado
+    // Create a new task object with the updated status
     const updatedTask = { ...task, status: newStatus };
 
-    // Despacha la acción para actualizar la tarea en el store
+    // Dispatch action to update the task in the store
     this.store.dispatch(updateTask({ task: updatedTask }));
   }
 
@@ -134,10 +137,11 @@ export class TaskListComponent implements OnInit {
       width: '700px',
     });
 
+    // After the dialog closes, dispatch action to add the new task
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.store.dispatch(addTask({ task: result }));
-        this.loadTasks();
+        this.loadTasks(); // Reload tasks to reflect the new task
       }
     });
   }
@@ -145,9 +149,10 @@ export class TaskListComponent implements OnInit {
   openTaskDetailModal(task: Task) {
     const dialogRef = this.dialog.open(TaskDetailComponent, {
       width: '700px',
-      data: { task } // Pasar el ID de la tarea al modal
+      data: { task } // Pass the task data to the modal
     });
 
+    // After the dialog closes, update the task with any changes made in the modal
     dialogRef.afterClosed().subscribe(result => {
       this.store.dispatch(updateTask({ task: { ...task, ...result } }));
     });

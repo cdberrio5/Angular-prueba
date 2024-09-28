@@ -1,66 +1,70 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
   <mat-card>
     <mat-card-content>
-      <h2 mat-dialog-title>Nueva Tarea</h2>
+      <h2 mat-dialog-title>New Task</h2> <!-- Title of the dialog for creating tasks -->
+
+      <!-- Field for the task title -->
       <mat-form-field appearance="fill">
-        <mat-label>Título</mat-label>
-        <input matInput id="title" formControlName="title" required />
-        <mat-error *ngIf="taskForm.get('title')?.hasError('required')">El título es obligatorio</mat-error>
+        <mat-label>Title</mat-label>
+        <input matInput id="title" formControlName="title" required /> <!-- Input for task title -->
+        <mat-error *ngIf="taskForm.get('title')?.hasError('required')">Title is required</mat-error> <!-- Error message if title is missing -->
       </mat-form-field>
 
-      <!-- Descripción -->
+      <!-- Field for the task description -->
       <mat-form-field appearance="fill">
-        <mat-label>Descripción</mat-label>
-        <textarea matInput id="description" formControlName="description"></textarea>
+        <mat-label>Description</mat-label>
+        <textarea matInput id="description" formControlName="description"></textarea> <!-- Textarea for task description -->
       </mat-form-field>
 
-      <!-- Fecha de vencimiento -->
+      <!-- Field for the task deadline -->
       <mat-form-field appearance="fill">
-        <mat-label>Fecha de Vencimiento</mat-label>
-        <input matInput id="deadline" type="date" formControlName="deadline" required />
-        <mat-error *ngIf="taskForm.get('deadline')?.hasError('required')">La fecha es obligatoria</mat-error>
+        <mat-label>Due Date</mat-label>
+        <input matInput id="deadline" type="date" formControlName="deadline" required /> <!-- Input for task deadline -->
+        <mat-error *ngIf="taskForm.get('deadline')?.hasError('required')">Due date is required</mat-error> <!-- Error message if deadline is missing -->
       </mat-form-field>
 
-      <!-- Usuarios asignados -->
+      <!-- Section for managing assigned users to the task -->
       <div formArrayName="assignedUsers">
-        <h3>Usuarios Asignados</h3>
+        <h3>Assigned Users</h3>
 
-        <!-- Autocompletado para búsqueda de usuario -->
+        <!-- Autocomplete to search and select users -->
         <mat-form-field appearance="fill">
-          <mat-label>Buscar Usuario</mat-label>
-          <input type="text" placeholder="Buscar Usuario" matInput [matAutocomplete]="auto"
-            [formControl]="userSearchControl" (input)="filterUsers(userSearchControl.value)" />
+          <mat-label>Search User</mat-label>
+          <input type="text" placeholder="Search User" matInput [matAutocomplete]="auto"
+            [formControl]="userSearchControl" (input)="filterUsers(userSearchControl.value)" /> <!-- Input for searching users -->
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onUserSelected($event.option.value)">
-            <mat-option *ngFor="let user of filteredUsers" [value]="user">
-              {{ user.fullName }} - {{ user.age }} años
+            <mat-option *ngFor="let user of filteredUsers" [value]="user"> <!-- Iterates over filtered users -->
+              {{ user.fullName }} - {{ user.age }} years <!-- Display user's full name and age -->
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
 
-        <!-- Lista de usuarios agregados -->
-        <div *ngFor="let user of assignedUsers.controls; let i = index" [formGroupName]="i" class="user-container">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>{{ user.get('name')?.value }}</mat-card-title>
-              <mat-card-subtitle>Edad: {{ user.get('age')?.value }} años</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <h4>Habilidades:</h4>
-              <ul>
-                <li *ngFor="let skill of user.get('skills')?.value">{{ skill }}</li>
-              </ul>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-raised-button color="warn" (click)="removeUser(i)">Eliminar Usuario</button>
-            </mat-card-actions>
-          </mat-card>
+        <!-- Container to display assigned users -->
+        <div class="assignedUserscontainer">
+          <div *ngFor="let user of assignedUsers.controls; let i = index" [formGroupName]="i" class="user-container">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{ user.get('name')?.value }}</mat-card-title> <!-- Display user's name -->
+                <mat-card-subtitle>Age: {{ user.get('age')?.value }} years</mat-card-subtitle> <!-- Display user's age -->
+              </mat-card-header>
+              <mat-card-content>
+                <h4>Skills:</h4>
+                <ul>
+                  <li *ngFor="let skill of user.get('skills')?.value">{{ skill }}</li> <!-- List user's skills -->
+                </ul>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-raised-button color="warn" (click)="removeUser(i)">Remove User</button> <!-- Button to remove assigned user -->
+              </mat-card-actions>
+            </mat-card>
+          </div>
         </div>
       </div>
 
-      <!-- Botones de acción -->
+      <!-- Action buttons to cancel or save the task -->
       <div class="action-buttons">
-        <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid">Guardar</button>
-        <button mat-raised-button type="button" (click)="onCancel()">Cancelar</button>
+        <button mat-raised-button class="btn-secondary" (click)="onCancel()">Cancel</button> <!-- Button to cancel task creation -->
+        <button mat-raised-button class="btn-primary" type="submit" [disabled]="taskForm.invalid">Save</button> <!-- Button to save task, disabled if form is invalid -->
       </div>
     </mat-card-content>
   </mat-card>

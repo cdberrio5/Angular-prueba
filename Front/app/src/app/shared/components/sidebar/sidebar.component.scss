@@ -1,74 +1,88 @@
 .layout {
+  // Main container set to flex to accommodate sidebar and content.
   display: flex;
-  height: 100vh;
+  height: 100vh; // Full viewport height for the layout.
 
   .sidebar {
-    background-color: white; // Fondo claro
-    width: 60px; // Ancho cuando está colapsado
-    transition: width 0.3s ease;
-    height: 100vh;
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); // Sombra para dar profundidad
+    // Sidebar styles.
+    background-color: white; // Light background color for the sidebar.
+    width: 60px; // Width of the sidebar when collapsed.
+    transition: width 0.3s ease; // Smooth transition for width change on expansion/collapse.
+    height: 100vh; // Sidebar spans the full height of the viewport.
+    padding-top: 20px; // Space at the top to separate the menu items from the top edge.
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); // Adds subtle shadow for depth effect.
 
     &.expanded {
-      width: 220px; // Ancho cuando está expandido
+      // Styles applied when the sidebar is expanded.
+      width: 220px; // Increased width when expanded.
     }
 
     .toggle-button {
+      // Styling for the sidebar toggle button.
       display: flex;
-      justify-content: center;
-      cursor: pointer;
-      margin-bottom: 20px;
+      justify-content: center; // Centers the toggle button horizontally.
+      cursor: pointer; // Indicates that the toggle button is clickable.
+      margin-bottom: 20px; // Space below the button to separate it from the menu items.
 
       mat-icon {
-        font-size: 28px;
-        color: #333;
+        font-size: 28px; // Larger icon for the toggle button.
+        color: #333; // Dark gray color for the icon.
       }
     }
 
     .menu-items {
+      // Container for the menu items (tasks, users, etc.).
       display: flex;
-      flex-direction: column;
+      flex-direction: column; // Arranges menu items vertically.
 
       a {
+        // Styling for each menu item link.
         display: flex;
-        justify-content: space-evenly; // Ajuste horizontal entre icono y texto
-        align-items: center; // Alineación vertical centrada
-        padding: 15px;
-        text-decoration: none;
-        color: #000; // Íconos y texto inactivos en negro
-        transition: background-color 0.3s ease, color 0.3s ease;
+        justify-content: space-evenly; // Space evenly between the icon and text.
+        align-items: center; // Vertically aligns the content (icon and text).
+        padding: 15px; // Padding around each menu item for better touch/click area.
+        text-decoration: none; // Removes default underline from links.
+        color: #000; // Default color for inactive menu icons and text.
+        transition: background-color 0.3s ease, color 0.3s ease; // Smooth transition for color changes on hover/active.
 
         mat-icon {
-          font-size: 24px;
-          transition: color 0.3s ease;
-          color: #000;
+          // Styling for the icon within the menu item.
+          font-size: 24px; // Slightly smaller than the toggle button icon.
+          transition: color 0.3s ease; // Smooth color transition for hover effects.
+          color: #000; // Default color for the icon.
         }
 
         .menu-text {
-          font-size: 18px;
-          color: #000;
-          transition: color 0.3s ease, opacity 0.3s ease;
-          opacity: 1; // Siempre visible cuando está expandido
+          // Styling for the text next to the icon in the menu item.
+          font-size: 18px; // Size of the text.
+          color: #000; // Default text color.
+          transition: color 0.3s ease, opacity 0.3s ease; // Smooth transition for hover/visibility changes.
+          opacity: 1; // Full opacity when visible (used when the sidebar is expanded).
         }
 
         &:hover {
-          background-color: #e0e0e0; // Fondo en hover
+          // Hover effect for the menu item.
+          background-color: #e0e0e0; // Light gray background on hover.
+          
           mat-icon {
-            color: #ff4081; // Íconos en rojizo en hover
+            color: #ff4081; // Changes icon color to pink on hover.
           }
+
           .menu-text {
-            color: #ff4081; // Texto en rojizo en hover
+            color: #ff4081; // Changes text color to pink on hover.
           }
         }
 
         &.active {
-          background-color: #ff4081; // Fondo rojizo cuando está activo
+          // Styling for the active/selected menu item.
+          background-color: #ff4081; // Pink background when the item is active.
+          
           mat-icon {
-            color: #fff; // Íconos blancos cuando están activos
+            color: #fff; // Icon color changes to white when active.
           }
+
           .menu-text {
-            color: #fff; // Texto blanco cuando está activo
+            color: #fff; // Text color changes to white when active.
           }
         }
       }
@@ -76,15 +90,17 @@
   }
 
   .content {
-    flex: 1; // Toma todo el espacio restante
-    padding: 20px;
-    transition: margin-left 0.3s ease;
+    // Main content area that takes up the remaining space.
+    flex: 1; // Grows to take up all available space remaining from the sidebar.
+    padding: 20px; // Padding around the content area.
+    transition: margin-left 0.3s ease; // Smooth transition when adjusting content margin (due to sidebar expansion).
 
-    // Margen para respetar el espacio del sidebar
+    // By default, the content starts with a margin matching the collapsed sidebar width.
     margin-left: 60px;
 
     &.expanded {
-      margin-left: 220px; // Margen mayor cuando el sidebar está expandido
+      // When the sidebar is expanded, the margin increases.
+      margin-left: 220px; // Matches the expanded sidebar width.
     }
   }
 }

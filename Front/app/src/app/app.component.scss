@@ -1,9 +1,9 @@
 .container {
-  display: flex;
+  display: flex; /* Enables flexbox layout for the container */
 }
 
 .content {
-  flex: 1;
-  padding: 20px;
-  background-color: #F4F4F4;
+  flex: 1; /* Allows the content to grow and fill the available space */
+  padding: 20px; /* Adds 20 pixels of padding inside the content area */
+  background-color: #F4F4F4; /* Sets a light gray background color for the content */
 }

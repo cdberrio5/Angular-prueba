@@ -1,17 +1,27 @@
 <div class="layout">
   <!-- Sidebar -->
   <div class="sidebar" [ngClass]="{'expanded': isExpanded}">
+    <!-- Toggle button to expand or collapse the sidebar -->
     <div class="toggle-button" (click)="toggleSidebar()">
+      <!-- Menu icon for the toggle button -->
       <mat-icon>menu</mat-icon>
     </div>
 
+    <!-- Menu items inside the sidebar -->
     <div class="menu-items">
+      <!-- Link to the tasks page, highlighting the active state -->
       <a routerLink="/tasks" routerLinkActive="active">
+        <!-- Task-related icon -->
         <mat-icon>view_agenda</mat-icon>
+        <!-- Task text, only shown if the sidebar is expanded -->
         <span class="menu-text" *ngIf="isExpanded">Tasks</span>
       </a>
+
+      <!-- Link to the users page, highlighting the active state -->
       <a routerLink="/users" routerLinkActive="active">
+        <!-- Users-related icon -->
         <mat-icon>people</mat-icon>
+        <!-- User text, only shown if the sidebar is expanded -->
         <span class="menu-text" *ngIf="isExpanded">Users</span>
       </a>
     </div>

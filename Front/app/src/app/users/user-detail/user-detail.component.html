@@ -1,40 +1,51 @@
+<!-- Form element bound to a FormGroup named userForm -->
 <form [formGroup]="userForm" (ngSubmit)="onUpdate()">
-  <mat-card>
-    <h2 mat-dialog-title>Detalles del Usuario</h2>
-    <mat-card-content>
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre completo</mat-label>
-        <input matInput formControlName="fullName" required>
+  <mat-card> <!-- Material card component for styling -->
+    <h2 mat-dialog-title>Detalles del Usuario</h2> <!-- Title of the dialog -->
+    <mat-card-content> <!-- Content area of the card -->
+      
+      <!-- Form field for full name -->
+      <mat-form-field appearance="fill"> <!-- Material form field with fill appearance -->
+        <mat-label>Nombre completo</mat-label> <!-- Label for the input field -->
+        <input matInput formControlName="fullName" required> <!-- Input field for full name, required -->
+        <!-- Error message if the full name is required but not filled -->
         <mat-error *ngIf="userForm.get('fullName')?.hasError('required')">Nombre completo es requerido.</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Edad</mat-label>
-        <input matInput type="number" formControlName="age" required>
+      <!-- Form field for age -->
+      <mat-form-field appearance="fill"> <!-- Material form field with fill appearance -->
+        <mat-label>Edad</mat-label> <!-- Label for the input field -->
+        <input matInput type="number" formControlName="age" required> <!-- Input field for age, required -->
+        <!-- Error message if the age is required but not filled -->
         <mat-error *ngIf="userForm.get('age')?.hasError('required')">Edad es requerida.</mat-error>
+        <!-- Error message if the age is less than the minimum value -->
         <mat-error *ngIf="userForm.get('age')?.hasError('min')">Edad debe ser mayor a 0.</mat-error>
       </mat-form-field>
 
+      <!-- Form array for skills, with a scrollable container -->
       <div formArrayName="skills" style="max-height: 400px; overflow-y: auto;">
+        <!-- Loop through each skill in the skills FormArray -->
         <div *ngFor="let skill of skills.controls; let i = index" style="display: flex; align-items: center; margin-bottom: 8px;">
-          <mat-form-field appearance="fill" style="flex: 1;">
-            <mat-label>Habilidad {{ i + 1 }}</mat-label>
-            <input matInput [formControlName]="i">
-            <button mat-icon-button (click)="removeSkill(i)">
-              <mat-icon>remove_circle</mat-icon>
+          <mat-form-field appearance="fill" style="flex: 1;"> <!-- Material form field for each skill -->
+            <mat-label>Habilidad {{ i + 1 }}</mat-label> <!-- Label showing skill number -->
+            <input matInput [formControlName]="i"> <!-- Input for skill, using index as control name -->
+            <!-- Button to remove the skill -->
+            <button mat-icon-button class="btn-primary" (click)="removeSkill(i)">
+              <mat-icon>remove_circle</mat-icon> <!-- Icon for remove action -->
             </button>
           </mat-form-field>
         </div>
       </div>
 
-      <!-- Botón para agregar una nueva habilidad -->
-      <button mat-raised-button color="primary" type="button" (click)="addSkill()">Agregar Habilidad</button>
+      <!-- Button to add a new skill to the skills array -->
+      <button mat-raised-button class="btn-primary" type="button" (click)="addSkill()">Agregar Habilidad</button>
     </mat-card-content>
 
-    <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Modificar</button>
-      <button mat-button type="button" (click)="onCancel()">Cancelar</button>
-      <button mat-raised-button color="warn" (click)="onDelete()">Eliminar</button>
+    <mat-card-actions> <!-- Actions area of the card -->
+      <!-- Button to cancel the operation -->
+      <button mat-button class="btn-secondary" type="button" (click)="onCancel()">Cancelar</button>
+      <!-- Button to submit the form -->
+      <button mat-raised-button class="btn-primary" type="submit">Modificar</button>
     </mat-card-actions>
   </mat-card>
 </form>

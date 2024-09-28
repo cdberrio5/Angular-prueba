@@ -1,25 +1,34 @@
 <div class="kanban-board">
+    <!-- Filter container for filtering tasks based on their status -->
     <div class="filter-container">
         <mat-form-field appearance="fill">
-            <mat-label>Filtrar por Estado</mat-label>
+            <mat-label>Filter by Status</mat-label>
             <mat-select [(value)]="selectedStatus" (selectionChange)="filterTasks()">
-                <mat-option [value]="0">Mostrar Todo</mat-option>
-                <mat-option [value]="1">Nuevas</mat-option>
-                <mat-option [value]="2">Pendientes</mat-option>
-                <mat-option [value]="3">Completadas</mat-option>
-                <mat-option [value]="4">Eliminadas</mat-option>
+                <!-- Option to show all tasks -->
+                <mat-option [value]="0">Show All</mat-option>
+                <!-- Option for new tasks -->
+                <mat-option [value]="1">New</mat-option>
+                <!-- Option for pending tasks -->
+                <mat-option [value]="2">Pending</mat-option>
+                <!-- Option for completed tasks -->
+                <mat-option [value]="3">Completed</mat-option>
+                <!-- Option for deleted tasks -->
+                <mat-option [value]="4">Deleted</mat-option>
             </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button class="add-task-btn" (click)="createTask()">Crear Nueva Tarea</button>
+        <!-- Button to create a new task -->
+        <button mat-raised-button class="add-task-btn" (click)="createTask()">Create New Task</button>
     </div>
 
+    <!-- Main task list that holds all task columns -->
     <div class="task-list" cdkDropListGroup>
-        <!-- Nueva Tareas -->
+        <!-- New Tasks Column -->
         <div class="kanban-column">
-            <h3>Nuevas Tareas</h3>
+            <h3>New Tasks</h3>
             <div cdkDropList [cdkDropListData]="(newTasks$ | async) ?? []" class="kanban-list"
                 (cdkDropListDropped)="drop($event)">
+                <!-- Loop through new tasks and create a card for each -->
                 <div *ngFor="let task of (newTasks$ | async) ?? []" cdkDrag>
                     <mat-card class="card-new" (click)="openTaskDetailModal(task)">
                         <mat-card-title>{{ task.title }}</mat-card-title>
@@ -32,11 +41,12 @@
             </div>
         </div>
 
-        <!-- Tareas Pendientes -->
+        <!-- Pending Tasks Column -->
         <div class="kanban-column">
-            <h3>Tareas Pendientes</h3>
+            <h3>Pending Tasks</h3>
             <div cdkDropList [cdkDropListData]="(pendingTasks$ | async) ?? []" class="kanban-list"
                 (cdkDropListDropped)="drop($event)">
+                <!-- Loop through pending tasks and create a card for each -->
                 <div *ngFor="let task of (pendingTasks$ | async) ?? []" cdkDrag>
                     <mat-card class="card-pending" (click)="openTaskDetailModal(task)">
                         <mat-card-title>{{ task.title }}</mat-card-title>
@@ -49,11 +59,12 @@
             </div>
         </div>
 
-        <!-- Tareas Completadas -->
+        <!-- Completed Tasks Column -->
         <div class="kanban-column">
-            <h3>Tareas Completadas</h3>
+            <h3>Completed Tasks</h3>
             <div cdkDropList [cdkDropListData]="(completedTasks$ | async) ?? []" class="kanban-list"
                 (cdkDropListDropped)="drop($event)">
+                <!-- Loop through completed tasks and create a card for each -->
                 <div *ngFor="let task of (completedTasks$ | async) ?? []" cdkDrag>
                     <mat-card class="card-complete" (click)="openTaskDetailModal(task)">
                         <mat-card-title>{{ task.title }}</mat-card-title>
@@ -66,10 +77,12 @@
             </div>
         </div>
 
+        <!-- Deleted Tasks Column -->
         <div class="kanban-column">
-            <h3>Tareas Eliminadas</h3>
+            <h3>Deleted Tasks</h3>
             <div cdkDropList [cdkDropListData]="(deletedTasks$ | async) ?? []" class="kanban-list"
                 (cdkDropListDropped)="drop($event)">
+                <!-- Loop through deleted tasks and create a card for each -->
                 <div *ngFor="let task of (deletedTasks$ | async) ?? []" cdkDrag>
                     <mat-card class="card-deleted" (click)="openTaskDetailModal(task)">
                         <mat-card-title>{{ task.title }}</mat-card-title>

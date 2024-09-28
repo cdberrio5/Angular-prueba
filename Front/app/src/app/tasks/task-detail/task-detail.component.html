@@ -1,63 +1,72 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
   <mat-card>
     <mat-card-content>
+      <!-- Title of the dialog -->
       <h2 mat-dialog-title>Detalle tarea</h2>
+      
+      <!-- Form field for task title -->
       <mat-form-field appearance="fill">
         <mat-label>Título</mat-label>
-        <input matInput formControlName="title" />
+        <input matInput formControlName="title" /> <!-- Binds input to the 'title' control in the form group -->
       </mat-form-field>
 
-      <!-- Descripción -->
+      <!-- Description field for the task -->
       <mat-form-field appearance="fill">
         <mat-label>Descripción</mat-label>
-        <textarea matInput formControlName="description"></textarea>
+        <textarea matInput formControlName="description"></textarea> <!-- Binds textarea to the 'description' control -->
       </mat-form-field>
 
-      <!-- Fecha de vencimiento -->
+      <!-- Deadline field for the task -->
       <mat-form-field appearance="fill">
         <mat-label>Fecha de Vencimiento</mat-label>
-        <input matInput formControlName="deadline" />
+        <input matInput formControlName="deadline" /> <!-- Binds input to the 'deadline' control -->
       </mat-form-field>
 
+      <!-- Container for assigned users -->
       <div formArrayName="assignedUsers">
         <h3>Usuarios Asignados</h3>
 
-        <!-- Autocompletado para búsqueda de usuario -->
+        <!-- Autocomplete field for user search -->
         <mat-form-field appearance="fill">
           <mat-label>Buscar Usuario</mat-label>
           <input type="text" placeholder="Buscar Usuario" matInput [matAutocomplete]="auto"
             [formControl]="userSearchControl" (input)="filterUsers(userSearchControl.value)" />
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onUserSelected($event.option.value)">
             <mat-option *ngFor="let user of filteredUsers" [value]="user">
-              {{ user.fullName }} - {{ user.age }} años
+              {{ user.fullName }} - {{ user.age }} años <!-- Displays user's full name and age -->
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
 
-        <!-- Lista de usuarios agregados -->
-        <div *ngFor="let user of assignedUsers.controls; let i = index" [formGroupName]="i" class="user-container">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>{{ user.get('name')?.value }}</mat-card-title>
-              <mat-card-subtitle>Edad: {{ user.get('age')?.value }} años</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <h4>Habilidades:</h4>
-              <ul>
-                <li *ngFor="let skill of user.get('skills')?.value">{{ skill }}</li>
-              </ul>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-raised-button color="warn" (click)="removeUser(i)">Eliminar Usuario</button>
-            </mat-card-actions>
-          </mat-card>
+        <!-- Container for displaying assigned users -->
+        <div class="assignedUserscontainer">
+          <div *ngFor="let user of assignedUsers.controls; let i = index" [formGroupName]="i" class="user-container">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{ user.get('name')?.value }}</mat-card-title> <!-- Displays the name of the assigned user -->
+                <mat-card-subtitle>Edad: {{ user.get('age')?.value }} años</mat-card-subtitle> <!-- Displays the user's age -->
+              </mat-card-header>
+              <mat-card-content>
+                <h4>Habilidades:</h4>
+                <ul>
+                  <li *ngFor="let skill of user.get('skills')?.value">{{ skill }}</li> <!-- Lists the user's skills -->
+                </ul>
+              </mat-card-content>
+              <mat-card-actions>
+                <!-- Button to remove an assigned user -->
+                <button mat-icon-button class="btn-primary" (click)="removeUser(i)">
+                  <mat-icon>remove_circle</mat-icon> <!-- Icon for removing the user -->
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
         </div>
       </div>
 
-      <!-- Botones de acción -->
+      <!-- Action buttons for cancel and save -->
       <div class="action-buttons">
-        <button mat-raised-button type="submit">Guardar</button>
-        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button mat-button class="btn-secondary" (click)="onCancel()">Cancelar</button> <!-- Button to cancel the operation -->
+        <button mat-raised-button class="btn-primary" type="submit">Guardar</button> <!-- Button to submit the form -->
       </div>
     </mat-card-content>
   </mat-card>

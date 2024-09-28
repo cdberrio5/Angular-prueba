@@ -1,62 +1,71 @@
+/* Style for the user search section */
 .user-search {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  display: flex; /* Use flexbox layout */
+  justify-content: center; /* Center items horizontally */
+  gap: 10px; /* Space between items */
+  margin-bottom: 20px; /* Bottom margin for spacing */
 }
 
+/* Style for the user list container */
 .user-list {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  display: grid; /* Use grid layout */
+  grid-template-columns: repeat(5, 1fr); /* Create 5 equal-width columns */
+  gap: 10px; /* Space between grid items */
 }
 
+/* Style for each user card */
 .user-card {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: white;
-  text-align: center;
+  border: 1px solid #ddd; /* Light gray border */
+  padding: 20px; /* Inner spacing */
+  border-radius: 5px; /* Rounded corners */
+  background-color: white; /* White background */
+  text-align: center; /* Center text */
 }
 
+/* Style for the user's full name in the card */
 .user-card h3 {
-  margin: 0;
-  margin-bottom: 10px;
-  font-size: 1.2em;
-  color: #333;
+  margin: 0; /* Remove default margin */
+  margin-bottom: 10px; /* Space below the heading */
+  font-size: 1.2em; /* Font size for the heading */
+  color: #333; /* Dark gray color */
 }
 
+/* Style for the user's age in the card */
 .user-card p {
-  margin: 0;
-  margin-bottom: 10px;
-  font-size: 1em;
-  color: #555;
+  margin: 0; /* Remove default margin */
+  margin-bottom: 10px; /* Space below the paragraph */
+  font-size: 1em; /* Font size for the paragraph */
+  color: #555; /* Medium gray color */
 }
 
+/* Style for the unordered list of skills */
 .user-card ul {
-  list-style-type: none;
-  padding: 0;
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
 }
 
+/* Style for each skill list item */
 .user-card ul li {
-  margin-bottom: 5px;
-  color: #777;
+  margin-bottom: 5px; /* Space below each list item */
+  color: #777; /* Light gray color */
 }
 
+/* Style for the "Add User" button */
 .add-user-btn {
-  align-self: flex-end;
-  background-color: #ff4081 !important;
-  color: white !important;
-  align-self: auto; /* Alinea el botón a la derecha */
+  align-self: flex-end; /* Align to the end of the flex container */
+  background-color: #ff4081 !important; /* Pink background color */
+  color: white !important; /* White text color */
+  align-self: auto; /* Align button to the right */
 }
 
+/* Style for the edit button on user cards */
 .edit-button {
-  background-color: #ff4081; /* Corregir la coma extra */
-  border-radius: 100%;
-  color: white;
+  background-color: #ff4081; /* Pink background color */
+  border-radius: 100%; /* Circular button */
+  color: white; /* White text color */
 }
 
-/* Efecto hover para botones */
+/* Hover effect for buttons */
 .add-user-btn:hover, .edit-button:hover {
-  background-color: #e91e63 !important; /* Cambiar a un color más oscuro en hover */
+  background-color: #e91e63 !important; /* Darker pink on hover */
 }

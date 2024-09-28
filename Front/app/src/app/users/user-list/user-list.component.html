@@ -1,25 +1,31 @@
+<!-- Container for the user search and add user button -->
 <div class="user-search">
+  <!-- Material form field for searching users -->
   <mat-form-field appearance="outline">
-    <mat-label>Buscar por nombre o edad</mat-label>
-    <input matInput [(ngModel)]="searchQuery" (input)="filterUsers()" />
-    <button mat-icon-button matSuffix (click)="searchUsers()">
-      <mat-icon>search</mat-icon>
+    <mat-label>Buscar por nombre o edad</mat-label> <!-- Label for the search field -->
+    <input matInput [(ngModel)]="searchQuery" (input)="filterUsers()" /> <!-- Input field bound to searchQuery; triggers filterUsers on input -->
+    <button mat-icon-button matSuffix (click)="searchUsers()"> <!-- Icon button to initiate search -->
+      <mat-icon>search</mat-icon> <!-- Search icon -->
     </button>
   </mat-form-field>
 
+  <!-- Button to open the user creation form -->
   <button mat-raised-button class="add-user-btn" (click)="openUserForm()">Crear Usuario</button>
-
 </div>
 
+<!-- Container for the list of users -->
 <div class="user-list">
+  <!-- Iterate through filteredUserList$ observable and create a user card for each user -->
   <div class="user-card" *ngFor="let user of filteredUserList$ | async">
-    <h3>{{ user.fullName }}</h3>
-    <p>Edad: {{ user.age }}</p>
+    <h3>{{ user.fullName }}</h3> <!-- Display the full name of the user -->
+    <p>Edad: {{ user.age }}</p> <!-- Display the age of the user -->
     <ul>
+      <!-- Iterate through the skills of the user and display each skill in a list item -->
       <li *ngFor="let skill of user.skills">{{ skill }}</li>
     </ul>
+    <!-- Icon button to open the user detail dialog for editing -->
     <button mat-icon-button class="edit-button" (click)="openUserDetail(user)">
-      <mat-icon>edit</mat-icon>
+      <mat-icon>edit</mat-icon> <!-- Edit icon -->
     </button>
   </div>
 </div>

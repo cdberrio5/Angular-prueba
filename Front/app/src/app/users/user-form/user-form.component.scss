@@ -1,20 +1,33 @@
+/* Style for mat-card component */
 mat-card {
-  margin: 16px;
-  padding: 16px;
+  margin: 16px; /* Set margin around the card */
+  padding: 16px; /* Set padding inside the card */
 
+  /* Media query for responsive design */
   @media (max-width: 600px) {
-    margin: 8px;
-    padding: 8px;
+    margin: 8px; /* Reduce margin for smaller screens */
+    padding: 8px; /* Reduce padding for smaller screens */
   }
 }
 
+/* Style for form field components */
 mat-form-field {
-  width: 100%;
+  width: 100%; /* Ensure form fields take full width of the container */
 }
 
+/* Style for button components */
 button {
-  margin-top: 8px;
+  margin-top: 8px; /* Add margin above buttons */
+  
+  /* Hover effect for buttons */
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1); /* Light gray background on hover */
   }
+}
+
+/* Style for actions within mat-card */
+mat-card-actions {
+  display: flex; /* Use flexbox layout */
+  justify-content: space-between; /* Distribute space evenly between action buttons */
+  gap: 8px; /* Add space between buttons */
 }

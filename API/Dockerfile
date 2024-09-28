@@ -1,13 +1,20 @@
-FROM node:18
+# Use the official Node.js 18 image as the base image
+FROM node:18 
 
-WORKDIR /app
+# Set the working directory inside the container to /app
+WORKDIR /app 
 
-COPY package*.json ./
+# Copy package.json and package-lock.json (if it exists) to the working directory
+COPY package*.json ./ 
 
-RUN npm install
+# Install the dependencies defined in package.json
+RUN npm install 
 
-COPY . .
+# Copy the rest of the application code to the working directory
+COPY . . 
 
-EXPOSE 3000
+# Expose port 3000 to allow access to the application from outside the container
+EXPOSE 3000 
 
-CMD ["npm", "start"]
+# Define the command to run the application when the container starts
+CMD ["npm", "start"] 

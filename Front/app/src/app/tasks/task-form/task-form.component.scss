@@ -1,41 +1,46 @@
 .task-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
+  display: flex; /* Uses flexbox to arrange elements within the form */
+  flex-direction: column; /* Elements are organized in a column */
+  gap: 1rem; /* Space between form elements */
+  padding: 1rem; /* Internal spacing of the form */
 
   mat-form-field,
   mat-card {
-    width: 100%;
+    width: 100%; /* Form fields and cards occupy 100% of the available width */
   }
 
   .user-container {
-    margin-bottom: 1rem;
+    margin-bottom: 1rem; /* Bottom space between assigned user containers */
   }
 
   .skill-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: flex; /* Uses flexbox to align user skills */
+    align-items: center; /* Vertically aligns items to the center */
+    gap: 0.5rem; /* Space between skill items */
   }
 
   .action-buttons {
-    display: flex;
-    justify-content: space-between;
+    display: flex; /* Uses flexbox to align action buttons */
+    justify-content: space-between; /* Distributes buttons to the ends of the container */
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 768px) { /* Media query for larger screens */
     .task-form {
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: row; /* Changes to a row layout on wider screens */
+      flex-wrap: wrap; /* Allows elements to wrap onto new lines if necessary */
 
       mat-form-field {
-        width: 48%;
+        width: 48%; /* Form fields occupy 48% of the width, allowing two per row */
       }
 
       .action-buttons {
-        justify-content: flex-start;
+        justify-content: flex-start; /* Aligns buttons to the start in wider screens */
       }
     }
   }
+}
+
+.assignedUserscontainer {
+  max-height: 300px; /* Sets a maximum height for the assigned users container */
+  overflow: auto; /* Allows scrolling if the content exceeds the maximum height */
 }
