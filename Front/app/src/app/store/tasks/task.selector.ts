@@ -19,7 +19,12 @@ export const selectCompletedTasks = createSelector(
   (state: TaskState) => state.tasks.filter(task => task.status === 3) // Cambia según el valor que uses para tareas completadas
 );
 
-export const selectAllTasks = createSelector(
+export const selectDeletedTasks = createSelector(
   selectTaskState,
-  (state: TaskState) => state.tasks
+  (state: TaskState) => state.tasks.filter(task => task.status === 4) // Cambia según el valor que uses para tareas completadas
+);
+
+export const selectTaskById = (taskId: number | null) => createSelector(
+  selectTaskState,
+  (state: TaskState) => state.tasks.find(task => task.id === taskId)
 );

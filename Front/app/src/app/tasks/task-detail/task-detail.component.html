@@ -1,27 +1,24 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
   <mat-card>
     <mat-card-content>
-      <h2 mat-dialog-title>Nueva Tarea</h2>
+      <h2 mat-dialog-title>Detalle tarea</h2>
       <mat-form-field appearance="fill">
         <mat-label>Título</mat-label>
-        <input matInput id="title" formControlName="title" required />
-        <mat-error *ngIf="taskForm.get('title')?.hasError('required')">El título es obligatorio</mat-error>
+        <input matInput formControlName="title" />
       </mat-form-field>
 
       <!-- Descripción -->
       <mat-form-field appearance="fill">
         <mat-label>Descripción</mat-label>
-        <textarea matInput id="description" formControlName="description"></textarea>
+        <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
 
       <!-- Fecha de vencimiento -->
       <mat-form-field appearance="fill">
         <mat-label>Fecha de Vencimiento</mat-label>
-        <input matInput id="deadline" type="date" formControlName="deadline" required />
-        <mat-error *ngIf="taskForm.get('deadline')?.hasError('required')">La fecha es obligatoria</mat-error>
+        <input matInput formControlName="deadline" />
       </mat-form-field>
 
-      <!-- Usuarios asignados -->
       <div formArrayName="assignedUsers">
         <h3>Usuarios Asignados</h3>
 
@@ -59,8 +56,8 @@
 
       <!-- Botones de acción -->
       <div class="action-buttons">
-        <button mat-raised-button color="primary" type="submit" [disabled]="taskForm.invalid">Guardar</button>
-        <button mat-raised-button type="button" (click)="onCancel()">Cancelar</button>
+        <button mat-raised-button type="submit">Guardar</button>
+        <button mat-button (click)="onCancel()">Cancelar</button>
       </div>
     </mat-card-content>
   </mat-card>

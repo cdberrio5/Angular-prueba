@@ -8,7 +8,7 @@
 .kanban-column {
   width: 30%;
   padding: 10px;
-  background-color: #f4f4f4;
+  background-color: white;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
@@ -33,6 +33,11 @@
 
 mat-card {
   margin-bottom: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-top: 2px solid #ddd;
+  border-right: 2px solid #ddd;
+  border-left: 2px solid #ddd;
+  cursor: pointer;
 }
 
 .add-task-btn {
@@ -47,4 +52,20 @@ mat-card {
   justify-content: space-between;
   gap: 20px;
   min-height: 200px;
+}
+
+.card-new {
+  border-bottom: 3px solid #009cff !important;
+}
+
+.card-pending {
+  border-bottom: 3px solid #ffa600 !important;
+}
+
+.card-complete {
+  border-bottom: 3px solid #00c749 !important;
+}
+
+.card-deleted {
+  border-bottom: 3px solid #ff5454 !important;
 }

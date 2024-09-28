@@ -4,10 +4,11 @@ import { TaskFormComponent } from '../task-form/task-form.component';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Task } from './../../models/task.model';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TaskState } from './../../store/tasks/task.state';
-import { selectNewTasks, selectPendingTasks, selectCompletedTasks } from './../../store/tasks/task.selector';
+import { selectNewTasks, selectPendingTasks, selectCompletedTasks, selectDeletedTasks } from './../../store/tasks/task.selector';
 import { addTask, loadTasks, updateTask } from './../../store/tasks/task.actions';
+import { TaskDetailComponent } from '../task-detail/task-detail.component';
 
 @Component({
   selector: 'app-task-list',
@@ -16,8 +17,11 @@ import { addTask, loadTasks, updateTask } from './../../store/tasks/task.actions
 })
 export class TaskListComponent implements OnInit {
   newTasks$: Observable<Task[]> | undefined;
-  pendingTasks$!: Observable<Task[]> | undefined;
-  completedTasks$!: Observable<Task[]> | undefined;
+  pendingTasks$: Observable<Task[]> | undefined;
+  completedTasks$: Observable<Task[]> | undefined;
+  deletedTasks$: Observable<Task[]> | undefined;
+  selectedStatus: number = 0;
+  allTasks!: Task[];
 
   constructor(
     private dialog: MatDialog,
@@ -25,13 +29,53 @@ export class TaskListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Cargar tareas al inicializar el componente
-    this.store.dispatch(loadTasks());
+    this.loadTasks();
+    this.filterTasks();
+  }
 
-    // Conectar observables con selectores del Store
+  loadTasks() {
+    this.store.dispatch(loadTasks());
+  }
+
+  filterTasks() {
+    // Reiniciar tareas
     this.newTasks$ = this.store.select(selectNewTasks);
     this.pendingTasks$ = this.store.select(selectPendingTasks);
     this.completedTasks$ = this.store.select(selectCompletedTasks);
+    this.deletedTasks$ = this.store.select(selectDeletedTasks);
+
+    // Aplicar filtro según el estado seleccionado
+    switch (this.selectedStatus) {
+      case 0:
+        break; // No hacemos nada porque ya tenemos todas las tareas
+      case 1: // Tareas Nuevas
+        console.log("muestra algo{")
+        this.newTasks$ = this.store.select(selectNewTasks);
+        this.pendingTasks$ = of([]); // Vaciar tareas pendientes
+        this.completedTasks$ = of([]); // Vaciar tareas completadas
+        this.deletedTasks$ = of([]); // Vaciar tareas completadas
+        break;
+      case 2: // Tareas Pendientes
+        this.newTasks$ = of([]); // Vaciar tareas nuevas
+        this.pendingTasks$ = this.store.select(selectPendingTasks);
+        this.completedTasks$ = of([]); // Vaciar tareas completadas
+        this.deletedTasks$ = of([]); // Vaciar tareas completadas
+        break;
+      case 3: // Tareas Completadas
+        this.newTasks$ = of([]); // Vaciar tareas nuevas
+        this.pendingTasks$ = of([]); // Vaciar tareas pendientes
+        this.completedTasks$ = this.store.select(selectCompletedTasks);
+        this.deletedTasks$ = of([]); // Vaciar tareas completadas
+        break;
+      case 4: // Tareas Completadas
+        this.newTasks$ = of([]); // Vaciar tareas nuevas
+        this.pendingTasks$ = of([]); // Vaciar tareas pendientes
+        this.completedTasks$ = of([]);
+        this.deletedTasks$ = this.store.select(selectDeletedTasks);
+        break;
+      default:
+        break;
+    }
   }
 
   drop(event: CdkDragDrop<Task[]>) {
@@ -48,40 +92,40 @@ export class TaskListComponent implements OnInit {
         event.currentIndex
       );
 
-      // Actualizar el estado de la tarea después de moverla
       this.onTaskMoved(event.container.id, task);
     }
   }
 
+
   onTaskMoved(newContainer: string, task: Task) {
     let newStatus: number;
 
-    // Determinar el nuevo estado de la tarea según la columna
     switch (newContainer) {
       case 'cdk-drop-list-0': // Nuevas Tareas
-        newStatus = 1; // Estado para nuevas tareas
+        newStatus = 1;
         break;
       case 'cdk-drop-list-1': // Tareas Pendientes
-        newStatus = 2; // Estado para tareas pendientes
+        newStatus = 2;
         break;
       case 'cdk-drop-list-2': // Tareas Completadas
-        newStatus = 3; // Estado para tareas completadas
+        newStatus = 3;
+        break;
+      case 'cdk-drop-list-3': // Tareas Eliminadas
+        newStatus = 4;
         break;
       default:
         return;
     }
 
-    // Actualizar el estado de la tarea
+    // Actualiza el estado de la tarea
     this.updateTaskStatus(task, newStatus);
   }
 
   updateTaskStatus(task: Task, newStatus: number) {
-    const updatedTask: Task = {
-      ...task,
-      status: newStatus
-    };
+    // Crea un nuevo objeto de tarea con el estado actualizado
+    const updatedTask = { ...task, status: newStatus };
 
-    // Despachar la acción para actualizar la tarea
+    // Despacha la acción para actualizar la tarea en el store
     this.store.dispatch(updateTask({ task: updatedTask }));
   }
 
@@ -89,24 +133,23 @@ export class TaskListComponent implements OnInit {
     const dialogRef = this.dialog.open(TaskFormComponent, {
       width: '700px',
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result, "result");
-        
-        this.store.dispatch(addTask({ task: result })); // Despacha la acción para agregar la nueva tarea
+        this.store.dispatch(addTask({ task: result }));
+        this.loadTasks();
       }
     });
   }
 
-  toggleCompletion(task: Task): void {
-    // Alternar el estado de la tarea entre completada y pendiente
-    const newStatus = task.status === 3 ? 2 : 3; // Si está completada (3), cambiar a pendiente (2) y viceversa
-    this.updateTaskStatus(task, newStatus);
-  }
+  openTaskDetailModal(task: Task) {
+    const dialogRef = this.dialog.open(TaskDetailComponent, {
+      width: '700px',
+      data: { task } // Pasar el ID de la tarea al modal
+    });
 
-  moveToPending(task: Task): void {
-    // Mover tarea de Nuevas a Pendientes
-    this.updateTaskStatus(task, 2); // Cambiar a estado de pendientes
+    dialogRef.afterClosed().subscribe(result => {
+      this.store.dispatch(updateTask({ task: { ...task, ...result } }));
+    });
   }
 }

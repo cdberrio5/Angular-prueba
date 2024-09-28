@@ -9,7 +9,7 @@ export class UserService {
     }
 
     public async getAllUsers(): Promise<User[]> {
-        return await this.userRepository.find();
+        return await this.userRepository.find({ order: { id: 'DESC' } });
     }
 
     public async getUserById(id: number): Promise<User | null> {

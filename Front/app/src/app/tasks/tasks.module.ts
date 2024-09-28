@@ -19,12 +19,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
-
+import { MatSelectModule } from '@angular/material/select'; 
+import { TaskDetailComponent } from './task-detail/task-detail.component';
 
 @NgModule({
   declarations: [
     TaskFormComponent,
-    TaskListComponent
+    TaskListComponent,
+    TaskDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -45,11 +47,13 @@ import { MatOptionModule } from '@angular/material/core';
     MatNativeDateModule,
     MatDatepickerModule,
     MatAutocompleteModule,
-    MatOptionModule
+    MatOptionModule,
+    MatSelectModule
   ],
   exports: [
     TaskFormComponent,
-    TaskListComponent
+    TaskListComponent,
+    TaskDetailComponent
   ]
 })
 export class TasksModule { }

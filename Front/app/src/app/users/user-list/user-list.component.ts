@@ -31,16 +31,13 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Action loadUsers dispatched');
     this.loadUsers();
     this.users$ = this.store.select(selectAllUsers);
 
-    // Inicializa la lista filtrada con todos los usuarios
     this.filteredUserList$ = this.users$;
   }
 
   private loadUsers() {
-    console.log('Despachando loadUsers');
     this.store.dispatch(loadUsers());
   }
 
@@ -87,22 +84,12 @@ export class UserListComponent implements OnInit {
     const dialogRef = this.dialog.open(UserFormComponent, {
       width: '600px',
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Manejar los datos devueltos aquí (por ejemplo, agregar el nuevo usuario a la lista)
-        console.log('Usuario creado:', result);
-      }
-    });
   }
 
   openUserDetail(user: User) {
     const dialogRef = this.dialog.open(UserDetailComponent, {
       width: '400px',
       data: user
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
     });
   }
 }

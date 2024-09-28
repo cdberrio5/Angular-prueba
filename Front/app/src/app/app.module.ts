@@ -17,7 +17,7 @@ import { TaskEffects } from './store/tasks/task.effects';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

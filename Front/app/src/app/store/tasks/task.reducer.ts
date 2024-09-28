@@ -1,23 +1,67 @@
 import { createReducer, on } from '@ngrx/store';
 import { TaskState, initialTaskState } from './task.state';
-import * as TaskActions from './task.actions';
+import { 
+  addTaskFailure, 
+  addTaskSuccess, 
+  deleteTaskFailure, 
+  deleteTaskSuccess, 
+  loadTasksFailure, 
+  loadTasksSuccess, 
+  updateTask, 
+  updateTaskFailure, 
+  updateTaskSuccess 
+} from './task.actions';
 
 export const taskReducer = createReducer(
   initialTaskState,
-  on(TaskActions.loadTasksSuccess, (state, { tasks }) => ({
+  on(loadTasksSuccess, (state, { tasks }) => ({
     ...state,
     tasks
   })),
-  on(TaskActions.addTask, (state, { task }) => ({
+
+  on(loadTasksFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error
+  })),
+
+  on(addTaskSuccess, (state, { task }) => ({
     ...state,
     tasks: [...state.tasks, task]
   })),
-  on(TaskActions.updateTask, (state, { task }) => ({
+
+  on(addTaskFailure, (state, { error }) => ({
     ...state,
-    tasks: state.tasks.map(t => t.id === task.id ? task : t)
+    loading: false,
+    error
   })),
-  on(TaskActions.deleteTask, (state, { taskId }) => ({
+
+  // Cambiar esta parte
+  on(updateTask, (state, { task }) => ({
     ...state,
-    tasks: state.tasks.filter(t => t.id !== taskId)
-  }))
+    tasks: state.tasks.map(t => (t.id === task.id ? task : t)) // Reemplaza la tarea existente
+  })),
+
+  // También cambiar updateTaskSuccess
+  on(updateTaskSuccess, (state, { task }) => ({
+    ...state,
+    tasks: state.tasks.map(t => (t.id === task.id ? task : t)) // Reemplaza la tarea existente
+  })),
+
+  on(updateTaskFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error
+  })),
+
+  on(deleteTaskSuccess, (state, { taskId }) => ({
+    ...state,
+    tasks: state.tasks.filter(p => p.id !== taskId),
+  })),
+
+  on(deleteTaskFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error
+  })),
 );

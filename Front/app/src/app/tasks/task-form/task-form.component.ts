@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Task } from './../../models/task.model';
-import { UserService } from './../../core/services/user.service'; // Servicio para buscar usuarios
+import { Store } from '@ngrx/store';
+import { loadUsers } from './../../store/users/user.actions'; // Asegúrate de que la ruta es correcta
+import { selectAllUsers } from './../../store/users/user.selector'; // Crea este selector
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-task-form',
@@ -14,12 +17,12 @@ export class TaskFormComponent implements OnInit {
   assignedUsers: FormArray;
   userSearchControl = new FormControl();
   filteredUsers: any[] = [];
-  allUsers: any[] = [];
+  allUsers: User[] = [];
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TaskFormComponent>,
-    private userService: UserService 
+    private store: Store // Inyectamos el Store
   ) {
     this.taskForm = this.fb.group({
       title: ['', Validators.required],
@@ -32,15 +35,19 @@ export class TaskFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe(users => {
+    // Cargamos los usuarios desde el store
+    this.store.dispatch(loadUsers());
+
+    // Seleccionamos los usuarios del estado
+    this.store.select(selectAllUsers).subscribe(users => {
       this.allUsers = users;
+      this.filteredUsers = users; // Inicializamos filteredUsers
     });
   }
 
-  // Filtra los usuarios según el input
   filterUsers(searchTerm: string) {
     if (!searchTerm) {
-      this.filteredUsers = this.allUsers; // Suponiendo que `allUsers` contiene todos los usuarios
+      this.filteredUsers = this.allUsers; 
       return;
     }
     
@@ -50,10 +57,8 @@ export class TaskFormComponent implements OnInit {
   }
 
   onUserSelected(user: { id: any; age: number; name: any; skills: any; }): void {
-    // Verifica si el usuario ya está en la lista asignada
     const userAlreadyAssigned = this.assignedUsers.controls.some(control => control.get('id')?.value === user.id);
     
-    // Verifica si el usuario es mayor de 18 y tiene al menos una habilidad
     if (!userAlreadyAssigned && user.age >= 18 && user.skills.length > 0) {
       const userForm = this.fb.group({
         id: [user.id],
@@ -65,7 +70,6 @@ export class TaskFormComponent implements OnInit {
       this.assignedUsers.push(userForm);
       this.userSearchControl.setValue('');
     } else {
-      // Muestra el mensaje de error adecuado
       let errorMessage = '';
       if (userAlreadyAssigned) {
         errorMessage = 'El usuario ya está asignado.';
@@ -75,18 +79,15 @@ export class TaskFormComponent implements OnInit {
         errorMessage = 'El usuario debe tener al menos una habilidad.';
       }
   
-      // Mostrar el mensaje de error (puedes utilizar un mat-snack-bar, alert, etc.)
+      this.userSearchControl.setValue('');
       this.showError(errorMessage);
     }
   }
   
-  // Función para mostrar el mensaje de error
   showError(message: string) {
-    // Aquí puedes usar mat-snack-bar u otro método para mostrar el error
-    console.error(message); // Por ahora solo se muestra en la consola
+    console.error(message); 
   }
 
-  // Eliminar usuario de la lista
   removeUser(index: number): void {
     this.assignedUsers.removeAt(index);
   }
