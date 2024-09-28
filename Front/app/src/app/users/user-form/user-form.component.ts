@@ -20,10 +20,10 @@ export class UserFormComponent {
   ) {
     // Initialize the form with controls and validations
     this.userForm = this.formBuilder.group({
-      fullName: ['', Validators.required], // Full name field is required
+      fullName: ['', [Validators.required, Validators.minLength(5)]], // Full name field is required and must be at least 5 characters
       age: ['', [Validators.required, Validators.min(1)]], // Age field is required and must be at least 1
       skills: this.formBuilder.array([]) // Initialize skills as an empty FormArray
-    });
+    });    
   }
 
   // Method to add a new skill to the FormArray
