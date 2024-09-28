@@ -8,6 +8,7 @@ import { User } from './../../models/user.model'; // Importing User model
 import { Task } from './../../models/task.model'; // Importing Task model
 import { selectAllUsers } from './../../store/users/user.selector'; // Selector to get all users from the store
 import { loadUsers } from './../../store/users/user.actions'; // Action to load users into the store
+import { ToastrService } from 'ngx-toastr'; // Importing ToastrService for notifications
 
 @Component({
   selector: 'app-task-detail', // Defining the selector for this component
@@ -25,7 +26,8 @@ export class TaskDetailComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { task: Task }, // Injecting dialog data for the task
     private dialogRef: MatDialogRef<TaskDetailComponent>, // Reference to the dialog for closing
     private fb: FormBuilder, // Injecting FormBuilder for form creation
-    private store: Store // Injecting Store for state management
+    private store: Store, // Injecting Store for state management
+    private toastr: ToastrService // Injecting ToastrService for notifications
   ) {
     // Initializing the form with task data and validators
     this.taskForm = this.fb.group({
@@ -158,6 +160,6 @@ export class TaskDetailComponent implements OnInit {
 
   // Function to show error messages in the console
   showError(message: string) {
-    console.error(message); // Logging error message to the console
+    this.toastr.error(message, 'Oops!'); // Logging error message to the console
   }
 }

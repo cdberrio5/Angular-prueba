@@ -21,6 +21,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'; // Impor
 import { MatOptionModule } from '@angular/material/core'; // Importing Material Design option module
 import { MatSelectModule } from '@angular/material/select'; // Importing Material Design select module
 import { TaskDetailComponent } from './task-detail/task-detail.component'; // Importing the component for task details
+import { ToastrModule } from 'ngx-toastr'; // Importing ToastrModule for notifications
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { TaskDetailComponent } from './task-detail/task-detail.component'; // Im
     MatDatepickerModule, // Importing Material datepicker module
     MatAutocompleteModule, // Importing Material autocomplete module
     MatOptionModule, // Importing Material option module
-    MatSelectModule // Importing Material select module
+    MatSelectModule, // Importing Material select module
+    ToastrModule.forRoot() // Importing ToastrModule for notifications
   ],
   exports: [
     TaskFormComponent, // Exporting TaskFormComponent for use in other modules

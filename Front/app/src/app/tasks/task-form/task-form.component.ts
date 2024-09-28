@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store'; // Imports Store for managing application s
 import { loadUsers } from './../../store/users/user.actions'; // Imports the action to load users from the Store
 import { selectAllUsers } from './../../store/users/user.selector'; // Imports selector to get all users
 import { User } from 'src/app/models/user.model'; // Imports the User interface for typing user data
+import { ToastrService } from 'ngx-toastr'; // Imports ToastrService for notifications
 
 @Component({
   selector: 'app-task-form', // Defines the component selector
@@ -22,7 +23,8 @@ export class TaskFormComponent implements OnInit { // Defines the component clas
   constructor(
     private fb: FormBuilder, // Injects FormBuilder to create reactive forms
     private dialogRef: MatDialogRef<TaskFormComponent>, // Injects dialog reference to close the dialog
-    private store: Store // Injects Store to access application state
+    private store: Store, // Injects Store to access application state
+    private toastr: ToastrService // Injects ToastrService for notifications
   ) {
     // Initializes the reactive form with fields and validations
     this.taskForm = this.fb.group({
@@ -95,7 +97,7 @@ export class TaskFormComponent implements OnInit { // Defines the component clas
   
   // Method to show error messages in the console
   showError(message: string) {
-    console.error(message); // Logs the error message to the console
+    this.toastr.error(message, 'Oops!'); // Logs the error message to the console
   }
 
   // Method to remove a user from the FormArray
