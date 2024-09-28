@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { UserEffects } from './store/users/user.effects';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TaskEffects } from './store/tasks/task.effects';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     HttpClientModule,
     MatDialogModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([UserEffects]),
+    EffectsModule.forRoot([UserEffects, TaskEffects]),
     StoreDevtoolsModule.instrument()
   ],
   providers: [],

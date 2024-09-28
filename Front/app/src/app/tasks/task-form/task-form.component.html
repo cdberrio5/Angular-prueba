@@ -1,4 +1,4 @@
-<h2>{{ data.task ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
+<h2>'Nueva Tarea'</h2>
 
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
   <!-- Título -->
@@ -17,8 +17,8 @@
   <!-- Fecha de vencimiento -->
   <mat-form-field appearance="fill">
     <mat-label>Fecha de Vencimiento</mat-label>
-    <input matInput id="dueDate" type="date" formControlName="dueDate" required />
-    <mat-error *ngIf="taskForm.get('dueDate')?.hasError('required')">La fecha es obligatoria</mat-error>
+    <input matInput id="deadline" type="date" formControlName="deadline" required />
+    <mat-error *ngIf="taskForm.get('deadline')?.hasError('required')">La fecha es obligatoria</mat-error>
   </mat-form-field>
 
   <!-- Usuarios asignados -->
@@ -28,10 +28,10 @@
     <!-- Autocompletado para búsqueda de usuario -->
     <mat-form-field appearance="fill">
       <mat-label>Buscar Usuario</mat-label>
-      <input type="text" placeholder="Buscar Usuario" matInput [matAutocomplete]="auto" [formControl]="userSearchControl">
+      <input type="text" placeholder="Buscar Usuario" matInput [matAutocomplete]="auto" [formControl]="userSearchControl" (input)="filterUsers(userSearchControl.value)" />
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onUserSelected($event.option.value)">
         <mat-option *ngFor="let user of filteredUsers" [value]="user">
-          {{ user.name }} - {{ user.age }} años
+          {{ user.fullName }} - {{ user.age }} años
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -54,8 +54,6 @@
         </mat-card-actions>
       </mat-card>
     </div>
-
-    <button mat-raised-button color="primary" type="button" (click)="addUser()">Añadir Usuario</button>
   </div>
 
   <!-- Botones de acción -->

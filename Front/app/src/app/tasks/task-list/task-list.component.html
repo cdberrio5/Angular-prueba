@@ -2,62 +2,50 @@
 
     <button mat-raised-button class="add-task-btn" (click)="createTask()">Crear Nueva Tarea</button>
 
-    <div class="task-list">
+    <div class="task-list" cdkDropListGroup>
+        <!-- Nueva Tareas -->
         <div class="kanban-column">
             <h3>Nuevas Tareas</h3>
-            <div cdkDropList id="newList" [cdkDropListData]="newTasks" class="task-list"
-                (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let task of newTasks" cdkDrag>
+            <div cdkDropList [cdkDropListData]="(newTasks$ | async) ?? []" class="kanban-list" (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let task of (newTasks$ | async) ?? []" cdkDrag>
                     <mat-card>
                         <mat-card-title>{{ task.title }}</mat-card-title>
                         <mat-card-content>
                             <p>{{ task.description }}</p>
-                            <p>Due: {{ task.dueDate | date }}</p>
+                            <p>{{ task.deadline | date }}</p>
                         </mat-card-content>
-                        <mat-card-actions>
-                            <button mat-button (click)="moveToPending(task)">Mover a Pendientes</button>
-                            <a mat-button [routerLink]="['/tasks', 'edit', task.id]">Editar</a>
-                        </mat-card-actions>
                     </mat-card>
                 </div>
             </div>
         </div>
 
+        <!-- Tareas Pendientes -->
         <div class="kanban-column">
             <h3>Tareas Pendientes</h3>
-            <div cdkDropList id="pendingList" [cdkDropListData]="pendingTasks" class="task-list"
-                (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let task of pendingTasks" cdkDrag>
+            <div cdkDropList [cdkDropListData]="(pendingTasks$ | async) ?? []" class="kanban-list" (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let task of (pendingTasks$ | async) ?? []" cdkDrag>
                     <mat-card>
                         <mat-card-title>{{ task.title }}</mat-card-title>
                         <mat-card-content>
                             <p>{{ task.description }}</p>
-                            <p>Due: {{ task.dueDate | date }}</p>
+                            <p>{{ task.deadline | date }}</p>
                         </mat-card-content>
-                        <mat-card-actions>
-                            <button mat-button (click)="toggleCompletion(task)">Marcar como Completada</button>
-                            <a mat-button [routerLink]="['/tasks', 'edit', task.id]">Editar</a>
-                        </mat-card-actions>
                     </mat-card>
                 </div>
             </div>
         </div>
 
+        <!-- Tareas Completadas -->
         <div class="kanban-column">
             <h3>Tareas Completadas</h3>
-            <div cdkDropList id="completedList" [cdkDropListData]="completedTasks" class="task-list"
-                (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let task of completedTasks" cdkDrag>
+            <div cdkDropList [cdkDropListData]="(completedTasks$ | async) ?? []" class="kanban-list" (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let task of (completedTasks$ | async) ?? []" cdkDrag>
                     <mat-card>
                         <mat-card-title>{{ task.title }}</mat-card-title>
                         <mat-card-content>
                             <p>{{ task.description }}</p>
-                            <p>Due: {{ task.dueDate | date }}</p>
+                            <p>{{ task.deadline | date }}</p>
                         </mat-card-content>
-                        <mat-card-actions>
-                            <button mat-button (click)="toggleCompletion(task)">Marcar como Pendiente</button>
-                            <a mat-button [routerLink]="['/tasks', 'edit', task.id]">Editar</a>
-                        </mat-card-actions>
                     </mat-card>
                 </div>
             </div>

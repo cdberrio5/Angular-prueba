@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskService } from './../../core/services/task.service';
-import { Task } from './../../models/task.model';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskFormComponent } from '../task-form/task-form.component';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog'; // Importar para manejar la modal
-import { TaskFormComponent } from '../task-form/task-form.component'; // Importar el componente del formulario
+import { Task } from './../../models/task.model';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { TaskState } from './../../store/tasks/task.state';
+import { selectNewTasks, selectPendingTasks, selectCompletedTasks } from './../../store/tasks/task.selector';
+import { addTask, loadTasks, updateTask } from './../../store/tasks/task.actions';
 
 @Component({
   selector: 'app-task-list',
@@ -12,79 +15,98 @@ import { TaskFormComponent } from '../task-form/task-form.component'; // Importa
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  newTasks: Task[] = []; // Añadimos la lista de nuevas tareas
-  pendingTasks: Task[] = [];
-  completedTasks: Task[] = [];
+  newTasks$: Observable<Task[]> | undefined;
+  pendingTasks$!: Observable<Task[]> | undefined;
+  completedTasks$!: Observable<Task[]> | undefined;
 
   constructor(
-    private taskService: TaskService,
-    private dialog: MatDialog // Inyectar MatDialog para manejar la modal
+    private dialog: MatDialog,
+    private store: Store<TaskState>
   ) { }
 
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe(tasks => {
-      this.newTasks = tasks.filter(task => task.status === 'new');
-      this.pendingTasks = tasks.filter(task => task.status === 'pending');
-      this.completedTasks = tasks.filter(task => task.status === 'completed');
-    });
+    // Cargar tareas al inicializar el componente
+    this.store.dispatch(loadTasks());
+
+    // Conectar observables con selectores del Store
+    this.newTasks$ = this.store.select(selectNewTasks);
+    this.pendingTasks$ = this.store.select(selectPendingTasks);
+    this.completedTasks$ = this.store.select(selectCompletedTasks);
   }
 
   drop(event: CdkDragDrop<Task[]>) {
     if (event.previousContainer === event.container) {
+      // Mover tarea dentro de la misma lista
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      // Transferir tarea entre listas
       const task = event.previousContainer.data[event.previousIndex];
-      if (event.container.id === 'newList') {
-        task.status = 'new';
-      } else if (event.container.id === 'pendingList') {
-        task.status = 'pending';
-      } else if (event.container.id === 'completedList') {
-        task.status = 'completed';
-      }
-      this.taskService.updateTask(task).subscribe(() => {
-        transferArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex
-        );
-      });
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+
+      // Actualizar el estado de la tarea después de moverla
+      this.onTaskMoved(event.container.id, task);
     }
   }
 
-  toggleCompletion(task: Task) {
-    task.status = task.status === 'completed' ? 'pending' : 'completed';
-    this.taskService.updateTask(task).subscribe();
+  onTaskMoved(newContainer: string, task: Task) {
+    let newStatus: number;
+
+    // Determinar el nuevo estado de la tarea según la columna
+    switch (newContainer) {
+      case 'cdk-drop-list-0': // Nuevas Tareas
+        newStatus = 1; // Estado para nuevas tareas
+        break;
+      case 'cdk-drop-list-1': // Tareas Pendientes
+        newStatus = 2; // Estado para tareas pendientes
+        break;
+      case 'cdk-drop-list-2': // Tareas Completadas
+        newStatus = 3; // Estado para tareas completadas
+        break;
+      default:
+        return;
+    }
+
+    // Actualizar el estado de la tarea
+    this.updateTaskStatus(task, newStatus);
+  }
+
+  updateTaskStatus(task: Task, newStatus: number) {
+    const updatedTask: Task = {
+      ...task,
+      status: newStatus
+    };
+
+    // Despachar la acción para actualizar la tarea
+    this.store.dispatch(updateTask({ task: updatedTask }));
   }
 
   createTask(): void {
-    // Abrir la modal con el formulario de crear nueva tarea
     const dialogRef = this.dialog.open(TaskFormComponent, {
-      width: '400px', // Ajustar el tamaño de la modal
-      data: {
-        task: null // Pasamos null para indicar que estamos creando una nueva tarea
-      }
+      width: '700px',
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Aquí creamos la tarea en la base de datos
-        this.taskService.createTask(result).subscribe(newTask => {
-          this.newTasks.push(newTask);
-        });
+        console.log(result, "result");
+        
+        this.store.dispatch(addTask({ task: result })); // Despacha la acción para agregar la nueva tarea
       }
     });
   }
 
-  moveToPending(task: Task) {
-    task.status = 'pending';
-    this.taskService.updateTask(task).subscribe(() => {
-      if (this.newTasks.includes(task)) {
-        this.newTasks = this.newTasks.filter(t => t.id !== task.id);
-      } else if (this.completedTasks.includes(task)) {
-        this.completedTasks = this.completedTasks.filter(t => t.id !== task.id);
-      }
-      this.pendingTasks.push(task);
-    });
+  toggleCompletion(task: Task): void {
+    // Alternar el estado de la tarea entre completada y pendiente
+    const newStatus = task.status === 3 ? 2 : 3; // Si está completada (3), cambiar a pendiente (2) y viceversa
+    this.updateTaskStatus(task, newStatus);
+  }
+
+  moveToPending(task: Task): void {
+    // Mover tarea de Nuevas a Pendientes
+    this.updateTaskStatus(task, 2); // Cambiar a estado de pendientes
   }
 }

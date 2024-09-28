@@ -4,8 +4,8 @@ export interface Task {
   id: number | null;
   title: string;
   description: string;
-  dueDate: Date;
+  deadline: Date;
   isCompleted: boolean;
   assignedUsers: User[];
-  status: string;
+  status: number;
 }
