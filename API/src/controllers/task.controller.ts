@@ -3,9 +3,13 @@ import { TaskService } from './../services/task.service';
 import { Task } from './../models/task.model';
 
 export class TaskController {
-  constructor(private taskService: TaskService) { }
+  private taskService: TaskService
+  
+  constructor() { 
+    this.taskService = new TaskService();
+  }
 
-  async createTask(req: Request, res: Response): Promise<Response> {
+  public async createTask(req: Request, res: Response): Promise<Response> {
     const taskData: Partial<Task> = req.body;
     try {
       const task = await this.taskService.createTask(taskData);

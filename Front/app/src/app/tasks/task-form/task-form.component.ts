@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { TaskService } from './../../core/services/task.service';
+import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Task } from './../../models/task.model';
-import { User } from './../../models/user.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { UserService } from './../../core/services/user.service'; // Servicio para buscar usuarios
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-task-form',
@@ -12,99 +13,80 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class TaskFormComponent implements OnInit {
   taskForm: FormGroup;
-  isEditMode: boolean = false;
-  taskId: number | null = null;
+  assignedUsers: FormArray;
+  userSearchControl = new FormControl();
+  filteredUsers: any[] = [];
+  allUsers: any[] = []; // Almacenar todos los usuarios
+data: any;
 
   constructor(
     private fb: FormBuilder,
-    private taskService: TaskService,
-    private router: Router,
-    private route: ActivatedRoute
+    private dialogRef: MatDialogRef<TaskFormComponent>,
+    private userService: UserService 
   ) {
     this.taskForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
+      title: ['', Validators.required],
       description: [''],
       dueDate: ['', Validators.required],
-      isCompleted: [false],
       assignedUsers: this.fb.array([])
     });
+
+    this.assignedUsers = this.taskForm.get('assignedUsers') as FormArray;
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.isEditMode = true;
-        this.taskId = +params['id'];
-        this.taskService.getTasks().subscribe(tasks => {
-          const task = tasks.find(t => t.id === this.taskId);
-          if (task) {
-            this.taskForm.patchValue({
-              title: task.title,
-              description: task.description,
-              dueDate: task.dueDate.toISOString().split('T')[0],
-              isCompleted: task.isCompleted
-            });
-            task.assignedUsers.forEach(user => {
-              this.addUser(user);
-            });
-          }
-        });
-      }
+    // Obtener todos los usuarios
+    this.userService.getUsers().subscribe(users => {
+      this.allUsers = users; // Asignar usuarios a allUsers
+      // Suscribirse a los cambios del campo de búsqueda para filtrar
+      this.userSearchControl.valueChanges.subscribe(value => {
+        this.filterUsers(value); // Filtrar usuarios en función de la búsqueda
+      });
     });
   }
 
-  get assignedUsers(): FormArray {
-    return this.taskForm.get('assignedUsers') as FormArray;
+  // Filtra los usuarios según el input
+  private filterUsers(value: string): void {
+    const filterValue = value.toLowerCase();
+    this.filteredUsers = this.allUsers.filter(user => user.name.toLowerCase().includes(filterValue));
   }
 
-  addUser(user?: User) {
-    const userGroup = this.fb.group({
-      fullName: [user ? user.fullName : '', Validators.required],
-      age: [user ? user.age : '', [Validators.required, Validators.min(1)]],
-      skills: this.fb.array(user ? user.skills.map(skill => this.fb.control(skill)) : [])
-    });
-    this.assignedUsers.push(userGroup);
+  // Añadir un usuario al formulario sin permitir editar su información
+  onUserSelected(user: { id: any; age: number; name: any; skills: any; }): void {
+    // Validar que el usuario tenga al menos 18 años y no esté ya asignado
+    if (!this.assignedUsers.controls.some(control => control.get('id')?.value === user.id) && user.age >= 18) {
+      const userForm = this.fb.group({
+        id: [user.id],
+        name: [user.name],
+        age: [user.age],
+        skills: this.fb.array(user.skills || [])
+      });
+
+      this.assignedUsers.push(userForm);
+      // Limpiar el campo de búsqueda después de seleccionar un usuario
+      this.userSearchControl.setValue('');
+    }
   }
 
-  removeUser(index: number) {
+  // Eliminar usuario de la lista
+  removeUser(index: number): void {
     this.assignedUsers.removeAt(index);
   }
 
-  getSkills(userIndex: number): FormArray {
-    return this.assignedUsers.at(userIndex).get('skills') as FormArray;
-  }
-
-  addSkill(userIndex: number, skill?: string) {
-    this.getSkills(userIndex).push(this.fb.control(skill || ''));
-  }
-
-  removeSkill(userIndex: number, skillIndex: number) {
-    this.getSkills(userIndex).removeAt(skillIndex);
-  }
-
-  onSubmit() {
-    if (this.taskForm.invalid) {
-      this.taskForm.markAllAsTouched();
-      return;
+  onSubmit(): void {
+    if (this.taskForm.valid) {
+      const taskData: Task = this.taskForm.value;
+      // Aquí puedes manejar la lógica para enviar la tarea al backend
+      console.log('Tarea enviada:', taskData);
+      this.dialogRef.close(taskData); // Cerrar el diálogo y enviar la tarea
     }
+  }
 
-    const formValue = this.taskForm.value;
-    const task: Task = {
-      id: this.taskId || 0,
-      title: formValue.title,
-      description: formValue.description,
-      dueDate: new Date(formValue.dueDate),
-      isCompleted: formValue.isCompleted,
-      assignedUsers: formValue.assignedUsers
-    };
+  onCancel(): void {
+    this.dialogRef.close();
+  }
 
-    if (this.isEditMode && this.taskId) {
-      this.taskService.updateTask(task).subscribe(() => {
-        this.router.navigate(['/tasks']);
-      });
-    } else {
-      this.taskService.createTask(task);
-      this.router.navigate(['/tasks']);
-    }
+  addUser() {
+    // Este método se puede usar si necesitas lógica adicional para agregar un usuario
   }
 }

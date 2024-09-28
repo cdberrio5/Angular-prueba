@@ -18,7 +18,7 @@
     <ul>
       <li *ngFor="let skill of user.skills">{{ skill }}</li>
     </ul>
-    <button mat-icon-button class="edit-button" (click)="editUser(user)">
+    <button mat-icon-button class="edit-button" (click)="openUserDetail(user)">
       <mat-icon>edit</mat-icon>
     </button>
   </div>

@@ -17,6 +17,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
@@ -40,7 +43,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ReactiveFormsModule,
     StoreModule.forFeature('tasks', taskReducer),
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatAutocompleteModule,
+    MatOptionModule
   ],
   exports: [
     TaskFormComponent,

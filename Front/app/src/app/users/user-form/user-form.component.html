@@ -15,9 +15,9 @@
         <mat-error *ngIf="userForm.get('age')?.hasError('min')">Edad debe ser mayor a 0.</mat-error>
       </mat-form-field>
 
-      <div formArrayName="skills">
-        <div *ngFor="let skill of skills.controls; let i = index">
-          <mat-form-field appearance="fill">
+      <div formArrayName="skills" style="max-height: 400px; overflow-y: auto;">
+        <div *ngFor="let skill of skills.controls; let i = index" style="display: flex; align-items: center; margin-bottom: 8px;">
+          <mat-form-field appearance="fill" style="flex: 1;">
             <mat-label>Habilidad {{ i + 1 }}</mat-label>
             <input matInput [formControlName]="i">
             <button mat-icon-button (click)="removeSkill(i)">

@@ -99,11 +99,10 @@ export class UserListComponent implements OnInit {
   openUserDetail(user: User) {
     const dialogRef = this.dialog.open(UserDetailComponent, {
       width: '400px',
-      data: user // Pasa los datos del usuario
+      data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // Puedes manejar cualquier lógica después de que el modal se cierra si es necesario
     });
   }
 }

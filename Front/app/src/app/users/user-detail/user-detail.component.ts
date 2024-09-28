@@ -45,8 +45,18 @@ export class UserDetailComponent {
     this.dialogRef.close();
   }
 
-  // Getter para acceder a skills
+  // Getter para acceder al FormArray de skills
   get skills(): FormArray {
     return this.userForm.get('skills') as FormArray;
+  }
+
+  // Método para agregar una nueva habilidad
+  addSkill(): void {
+    this.skills.push(this.formBuilder.control('')); // Agrega un control vacío al array
+  }
+
+  // Método para eliminar una habilidad específica
+  removeSkill(index: number): void {
+    this.skills.removeAt(index); // Elimina la habilidad en el índice especificado
   }
 }

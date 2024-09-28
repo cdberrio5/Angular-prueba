@@ -1,21 +1,44 @@
 mat-card {
-    margin: 16px;
-    padding: 16px;
-  
-    @media (max-width: 600px) {
-      margin: 8px;
-      padding: 8px;
-    }
+  margin: 16px;
+  padding: 16px;
+
+  @media (max-width: 600px) {
+    margin: 8px;
+    padding: 8px;
   }
-  
-  mat-form-field {
-    width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  margin-top: 8px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
-  
-  button {
-    margin-top: 8px;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-  }
-  
+}
+
+mat-card {
+  padding: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+button {
+  margin-top: 16px;
+}
+
+mat-icon-button {
+  vertical-align: middle;
+}

@@ -15,6 +15,9 @@ export class Task {
   @Column()
   deadline!: Date;
 
+  @Column({ type: 'int', default: 1 })
+  status!: number; 
+
   @ManyToMany(() => User)
   @JoinTable()
   associatedUsers!: User[];
