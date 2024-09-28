@@ -7,19 +7,19 @@ const taskController = new TaskController();
 const asyncHandler = (fn: Function) => (req: any, res: any, next: any) =>
     Promise.resolve(fn(req, res, next)).catch(next);
 
-// Ruta para crear una tarea
+// Route to create a task
 router.post('/tasks', asyncHandler((req: Request, res: Response) => taskController.createTask(req, res)));
 
-// Ruta para obtener todas las tareas
+// Route to get all tasks
 router.get('/tasks', asyncHandler((req: Request, res: Response) => taskController.getAllTasks(req, res)));
 
-// Ruta para obtener una tarea por ID
+// Route to get a task by ID
 router.get('/tasks/:id', asyncHandler((req: Request, res: Response) => taskController.getTaskById(req, res)));
 
-// Ruta para actualizar una tarea por ID
+// Route to update a task by ID
 router.put('/tasks/:id', asyncHandler((req: Request, res: Response) => taskController.updateTask(req, res)));
 
-// Ruta para eliminar una tarea por ID
+// Route to delete a task by ID
 router.delete('/tasks/:id', asyncHandler((req: Request, res: Response) => taskController.deleteTask(req, res)));
 
 export default router;

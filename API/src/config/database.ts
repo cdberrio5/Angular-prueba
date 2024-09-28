@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Define the AppDataSource with MySQL configuration.
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: process.env.DB_HOST,
@@ -18,24 +19,28 @@ export const AppDataSource = new DataSource({
   entities: [User, Task],
 });
 
+// Function to connect to the database with retry logic.
 export const connectDatabase = async () => {
   const maxRetries = 3;
   let retries = 0;
 
   while (retries < maxRetries) {
     try {
+      // Attempt to initialize the data source.
       await AppDataSource.initialize();
-      console.log("Conexión a la base de datos establecida correctamente.");
+      console.log("Database connection established successfully.");
       return;
     } catch (error) {
       retries++;
-      console.error(`Error al conectar a la base de datos (intento ${retries} de ${maxRetries}):`, error);
+      console.error(`Error connecting to the database (attempt ${retries} of ${maxRetries}):`, error);
 
       if (retries < maxRetries) {
-        console.log(`Reintentando conexión en 10 segundos...`);
+        console.log(`Retrying connection in 10 seconds...`);
+        // Wait for 10 seconds before retrying.
         await new Promise((resolve) => setTimeout(resolve, 10000));
       } else {
-        console.error("Se han agotado los intentos de conexión. Cerrando el proceso.");
+        console.error("All connection attempts failed. Exiting the process.");
+        // Exit the process if all retries fail.
         process.exit(1);
       }
     }

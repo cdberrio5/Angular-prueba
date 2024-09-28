@@ -28,29 +28,25 @@ export class TaskService {
   async updateTask(id: number, taskData: Partial<Task>): Promise<Task | null> {
     const { status, assignedUsers } = taskData; // Destructure status and assignedUsers from the provided taskData
   
-    // If assignedUsers exists, update only the assigned users array
-    if (assignedUsers) {
-      if (!Array.isArray(assignedUsers)) {
-        throw new Error("'assignedUsers' debe ser un array si se proporciona."); // Throw an error if assignedUsers is not an array
-      }
-  
-      // Fetch the existing task to update its many-to-many relationship
-      const task = await this.getTaskById(id);
-      if (!task) {
-        throw new Error('La tarea no existe.'); // Throw an error if the task does not exist
-      }
-  
-      // Update the many-to-many relationship for assignedUsers
-      task.assignedUsers = assignedUsers; // Set the new assigned users
-      await this.taskRepository.save(task); // Save the updated task
-    } 
-    // If assignedUsers does not exist, update the task's status
-    else if (status !== undefined) {
-      await this.taskRepository.update(id, taskData); // Update the task with the provided task data
-    } else {
-      throw new Error("El campo 'status' es obligatorio cuando 'assignedUsers' no está presente."); // Throw an error if neither assignedUsers nor status is provided
+    if (!Array.isArray(assignedUsers)) {
+      throw new Error("'assignedUsers' debe ser un array si se proporciona."); // Throw an error if assignedUsers is not an array
     }
-  
+
+    if (!status) {
+      throw new Error("'assignedUsers' debe ser un array si se proporciona."); // Throw an error if status is undefined
+    }
+
+    // Fetch the existing task to update its many-to-many relationship
+    const task = await this.getTaskById(id);
+    if (!task) {
+      throw new Error('La tarea no existe.'); // Throw an error if the task does not exist
+    }
+
+    // Update the many-to-many relationship for assignedUsers
+    task.assignedUsers = assignedUsers; // Set the new assigned users
+    task.status = status;
+    await this.taskRepository.save(task); // Save the updated task
+
     // Return the updated task
     return await this.getTaskById(id); // Fetch and return the updated task
   }
